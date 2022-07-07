@@ -8,3 +8,9 @@ CREATE TABLE users
     password character(64),
     PRIMARY KEY (id_user)
 );
+
+INSERT INTO users (id_user, name, surname, mail, username, password) VALUES(1, 'Stepan', 'Nedotepan', 'stepa@gmail.com',
+'realStepan', '1111');
+
+INSERT INTO users (id_user, name, surname, mail, username, password) VALUES(2, 'Pavel', 'Java', 'paja@gmail.com',
+'paja', '2222');
