@@ -1,4 +1,4 @@
-package com.exadel.sandboxteam3a.entity;
+package com.exadel.sandboxteam3a.dao.entity;
 import lombok.Data;
 
 import javax.persistence.*;
