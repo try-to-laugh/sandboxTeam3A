@@ -7,7 +7,6 @@
     <modules>
         <module>rest</module>
         <module>model</module>
-        <module>dao-impl</module>
         <module>dao-api</module>
         <module>service-impl</module>
         <module>service-api</module>
@@ -30,6 +29,7 @@
     <properties>
         <java.version>17</java.version>
         <spring.boot.version>2.7.1</spring.boot.version>
+        <spring.module.version>5.7.2</spring.module.version>
         <postgre.version>42.3.6</postgre.version>
         <lombok.version>1.18.24</lombok.version>
     </properties>
@@ -84,6 +84,11 @@
                 <version>${spring.boot.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-config</artifactId>
+                <version>${spring.module.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
                 <version>${spring.boot.version}</version>
@@ -103,11 +108,13 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>
+                <version>${spring.boot.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-test</artifactId>
+                <version>${spring.module.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
