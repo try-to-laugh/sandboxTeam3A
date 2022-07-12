@@ -32,6 +32,7 @@
         <spring.boot.version>2.7.1</spring.boot.version>
         <postgre.version>42.3.6</postgre.version>
         <lombok.version>1.18.24</lombok.version>
+        <liquid.base.version>4.11.0</liquid.base.version>
     </properties>
 
     <dependencyManagement>
@@ -73,7 +74,6 @@
                 <artifactId>service-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -111,6 +111,11 @@
                 <artifactId>spring-security-test</artifactId>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-core</artifactId>
+                <version>${liquid.base.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -118,14 +123,16 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <groupId>org.flywaydb</groupId>
-                    <artifactId>flyway-maven-plugin</artifactId>
-                    <configuration>
-                        <url>jdbc:postgresql://localhost:5432/shema_name</url>
-                        <user>username</user>
-                        <password>password</password>
-                    </configuration>
-                    <version>8.3.0</version>
+                    <groupId>org.liquibase</groupId>
+                    <artifactId>liquibase-maven-plugin</artifactId>
+                    <version>${liquid.base.version}</version>
+                    <dependencies>
+                    <dependency>
+                        <groupId>org.liquibase.ext</groupId>
+                        <artifactId>liquibase-postgresql</artifactId>
+                        <version>${liquid.base.version}</version>
+                    </dependency>
+                </dependencies>
                 </plugin>
             </plugins>
         </pluginManagement>
