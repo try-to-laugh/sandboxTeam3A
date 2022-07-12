@@ -1,21 +1,61 @@
 package com.sandbox.service;
 
-import com.sandbox.User;
-import com.sandbox.dao.UserDao;
+import com.sandbox.dto.RoleDto;
+import com.sandbox.dto.UserDto;
+import com.sandbox.entities.User;
+import com.sandbox.mappers.RoleMapper;
+import com.sandbox.mappers.UserMapper;
+import com.sandbox.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService{
+@Transactional
+public class UserServiceImpl implements UserService {
 
-    private final UserDao userDao;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final RoleMapper roleMapper;
 
     @Override
-    public List<User> findAllUsers(){
-        return userDao.findAll();
+    public List<UserDto> findAllUsers() {
+        return userMapper.toUsersDtoList(userRepository.findAll());
+    }
+
+    @Override
+    public UserDto findUserByEmail(String email) {
+        return userMapper.toUserDto(userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found")));
+    }
+
+    @Override
+    public void saveUser(UserDto userDto) {
+        userRepository.save(userMapper.toUser(userDto));
+    }
+
+    @Override
+    public UserDto addRoleToUser(UserDto userDto, RoleDto roleDto) {
+        User user = userMapper.toUser(userDto);
+        user.getRoles().add(roleMapper.toRole(roleDto));
+        return userMapper.toUserDto(user);
+    }
+
+    @Override
+    public UserDto encodeAndSetPasswordToUser(UserDto userDto, PasswordEncoder passwordEncoder) {
+        User user = userMapper.toUser(userDto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userMapper.toUserDto(user);
+    }
+
+    @Override
+    public Set<RoleDto> getUserRoles(UserDto userDto) {
+        return roleMapper.toSetRolesDto(userMapper.toUser(userDto).getRoles());
     }
 }
