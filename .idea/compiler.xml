@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="budget" target="17" />
+      <module name="dao-api" target="17" />
+      <module name="dao-impl" target="17" />
+      <module name="model" target="17" />
+      <module name="release-db" target="17" />
+      <module name="rest" target="17" />
+      <module name="service-api" target="17" />
+      <module name="service-impl" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="dao-api" options="-parameters" />
+      <module name="dao-impl" options="-parameters" />
+      <module name="model" options="-parameters" />
+      <module name="release-db" options="-parameters" />
+      <module name="rest" options="-parameters" />
+      <module name="service-api" options="-parameters" />
+      <module name="service-impl" options="-parameters" />
+    </option>
+  </component>
+</project>
