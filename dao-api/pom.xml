@@ -21,5 +21,4 @@
             <artifactId>spring-data-jpa</artifactId>
         </dependency>
     </dependencies>
-
 </project>
