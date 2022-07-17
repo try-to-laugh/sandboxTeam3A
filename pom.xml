@@ -11,7 +11,6 @@
         <module>service-impl</module>
         <module>service-api</module>
         <module>release-db</module>
-        <module>rest-api</module>
     </modules>
 
     <parent>
