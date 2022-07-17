@@ -1,0 +1,38 @@
+  version: '3.1'
+
+  services:
+    server:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      restart: always
+      container_name: spring_boot
+      ports:
+        - "8080:8080"
+      volumes:
+        - ../server_data:/data
+        - ../server_logs:/logs
+        - ../server_files:/home/shoh/Documents/file
+      depends_on:
+        - db
+      links:
+        - db
+
+    db:
+      image: postgres:12.10-alpine
+      container_name: db
+      ports:
+        - 5432:5432
+      restart: always
+      volumes:
+        - db_data:/var/lib/postgresql/data
+      environment:
+        - POSTGRES_DB=database
+        - POSTGRES_USER=Alan
+        - POSTGRES_PASSWORD=123
+
+  volumes:
+    server_data:
+    server_logs:
+    db_data:
+    server_files:
