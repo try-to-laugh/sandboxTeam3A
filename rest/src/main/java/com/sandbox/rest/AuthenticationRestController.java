@@ -9,6 +9,7 @@ import com.sandbox.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -32,6 +34,7 @@ public class AuthenticationRestController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
+    @PermitAll
     public ResponseEntity<String> authenticate(@RequestBody AuthenticationRequestDTO request) {
         try {
             User user = authenticationService.authenticateUserAndGetToken(request);
@@ -43,6 +46,7 @@ public class AuthenticationRestController {
     }
 
     @PostMapping(path = "/registration")
+    @PermitAll
     public ResponseEntity<String> register(@RequestBody User user) {
         userService.encodeAndSetPasswordToUser(user, passwordEncoder);
         userService.addRoleToUser(user, roleService.findRoleByName("USER").get());
@@ -51,6 +55,7 @@ public class AuthenticationRestController {
     }
 
     @PostMapping("/logout")
+    @PreAuthorize("isAuthenticated()")
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
         securityContextLogoutHandler.logout(request, response, null);
