@@ -3,25 +3,29 @@ package com.sandbox.rest;
 import com.sandbox.User;
 import com.sandbox.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
 
 @RestController
-@RequestMapping("/budget")
+@RequestMapping("api/budget")
 @RequiredArgsConstructor
 public class MainController {
 
-  private final UserService userService;
+    private final UserService userService;
 
     @GetMapping("/hello")
+    @PreAuthorize("isAuthenticated()")
     public String sayHello() {
         return "hello world";
     }
 
-       @GetMapping
-       public List<User> getAllUsers(){
+    @GetMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<User> getAllUsers() {
         return userService.findAllUsers();
     }
 }
