@@ -1,4 +1,4 @@
-package com.sandbox.entities;
+package com.sandbox.entity;
 
 import lombok.Data;
 
@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -49,4 +50,7 @@ public class User implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    private Set<Wallet> wallets = new HashSet<>();
 }
