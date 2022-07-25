@@ -2,16 +2,14 @@ package com.sandbox.service;
 
 import com.sandbox.entity.Wallet;
 import com.sandbox.repository.WalletRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class WalletServiceImpl implements WalletService {
     private WalletRepository walletRepository;
-    private Wallet wallet;
 
     @Override
     public void deleteById(Long id) {
-        wallet = walletRepository.getById(id);
-        if (!wallet.isDefault()) {
-            walletRepository.deleteById(id);
-        }
+
     }
 }

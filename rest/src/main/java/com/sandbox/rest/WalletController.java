@@ -7,9 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 public class WalletController {
- WalletService walletService;
+    private WalletService walletService;
+
     @DeleteMapping(path = "/{id}")
     @ResponseBody
     public ResponseEntity deleteAccount(@PathVariable("id") Long id) {

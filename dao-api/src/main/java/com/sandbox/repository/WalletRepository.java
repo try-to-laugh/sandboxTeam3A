@@ -1,9 +1,8 @@
 package com.sandbox.repository;
 
 import com.sandbox.entity.Wallet;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface WalletRepository {//TODO might to use JpaRepository
+public interface WalletRepository extends JpaRepository<Wallet, Long> {
 
-    void deleteById(Long id);
-    Wallet getById(Long id);
 }
