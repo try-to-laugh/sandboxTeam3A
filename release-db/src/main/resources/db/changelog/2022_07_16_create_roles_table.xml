@@ -2,20 +2,14 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
-    <changeSet id="2022_07_14_create_users_table" author="Aleksei Gustyr">
-        <createTable tableName="users">
+    <changeSet id="2022_07_16_create_roles_table" author="Nataly Tereshkova">
+        <createTable tableName="roles">
             <column name="id" type="bigint" autoIncrement="true"/>
             <column name="name" type="varchar(255)"/>
-            <column name="surname" type="varchar(255)"/>
-            <column name="email" type="varchar(255)">
-                    <constraints unique="true"/>
-            </column>
-            <column name="username" type="varchar(255)"/>
-            <column name="password" type="varchar(255)"/>
         </createTable>
-        <addPrimaryKey tableName="users" columnNames="id"/>
+        <addPrimaryKey tableName="roles" columnNames="id"/>
         <rollback>
-            <dropTable tableName="users"/>
+            <dropTable tableName="roles"/>
         </rollback>
     </changeSet>
 </databaseChangeLog>

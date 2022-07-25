@@ -35,4 +35,8 @@ build/
 /mvnw
 /mvnw.cmd
 
+
 /**/reports/pmd/
+
+/rest/logs/
+
