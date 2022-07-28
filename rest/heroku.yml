@@ -1,6 +1,0 @@
-build:
-        docker:
-        web: Dockerfile
-#        run:
-#                web: bundle exec puma -C config/puma.rb
-#        If you don’t include a run section, Heroku uses the CMD specified in the Dockerfile.
