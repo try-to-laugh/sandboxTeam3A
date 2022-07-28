@@ -51,6 +51,7 @@ public class User implements Serializable {
     )
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    @OneToMany
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private Set<Wallet> wallets = new HashSet<>();
 }
