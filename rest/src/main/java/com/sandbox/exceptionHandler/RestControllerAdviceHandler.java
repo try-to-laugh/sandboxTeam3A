@@ -1,8 +1,8 @@
 package com.sandbox.exceptionHandler;
 
-import com.sandbox.exceptionHandler.exceptions.BudgetRuntimeException;
-import com.sandbox.exceptionHandler.exceptions.ResourceNotFoundException;
-import com.sandbox.exceptionHandler.exceptions.WalletNotFoundException;
+import com.sandbox.exception.BudgetRuntimeException;
+import com.sandbox.exception.ResourceNotFoundException;
+import com.sandbox.exception.WalletNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;

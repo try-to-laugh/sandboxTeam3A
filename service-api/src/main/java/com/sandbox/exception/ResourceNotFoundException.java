@@ -1,4 +1,4 @@
-package com.sandbox.exceptionHandler.exceptions;
+package com.sandbox.exception;
 
 public class ResourceNotFoundException extends BudgetRuntimeException {
 

@@ -2,7 +2,7 @@ package com.sandbox.service;
 
 import com.sandbox.entity.User;
 import com.sandbox.entity.Wallet;
-import com.sandbox.exceptionHandler.exceptions.WalletNotFoundException;
+import com.sandbox.exception.WalletNotFoundException;
 import com.sandbox.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,20 +16,20 @@ import java.util.Optional;
 @Transactional
 public class WalletServiceImpl implements WalletService {
     private final WalletRepository walletRepository;
-    Optional<Wallet> wallet;
 
     @Override
     public void deleteById(Long id) {
-        wallet = Optional.ofNullable(walletRepository.findById(id).orElseThrow(() -> new WalletNotFoundException("Impossible to delete this wallet. Wallet not found with id " + id)));
+        Wallet foundedWallet = walletRepository.findById(id).orElseThrow(() -> new WalletNotFoundException("Impossible to delete this wallet. Wallet not found with id " + id));
 
-        if (wallet.get().isDefault()) {
+        if (foundedWallet.isDefault()) {
             changeDefaultWallet(id);
         }
         walletRepository.deleteById(id);
     }
 
     private void changeDefaultWallet(long deletedWalletId) {
-        User walletOwner = wallet.get().getUser();
+        Wallet wallet = new Wallet();
+        User walletOwner = wallet.getUser();
         Optional<Wallet> newDefaultWalletOptional = walletOwner.getWallets().stream().filter(x -> x.getId() != deletedWalletId)
                 .max(Comparator.comparing(Wallet::getBalance));
         if (newDefaultWalletOptional.isEmpty()) {
