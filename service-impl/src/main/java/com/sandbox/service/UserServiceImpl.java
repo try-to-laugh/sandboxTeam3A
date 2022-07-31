@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -57,5 +58,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<RoleDto> getUserRoles(UserDto userDto) {
         return roleMapper.toSetRolesDto(userMapper.toUser(userDto).getRoles());
+    }
+
+    @Override
+    public Optional<User> findUserById(Long id) {
+        return userRepository.findById(id);
     }
 }

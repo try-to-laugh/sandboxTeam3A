@@ -7,13 +7,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.List;
 
 
 @Entity
 @Table(name = "currencies")
 @Data
-public class Currency {
+public class Currency implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,5 +25,8 @@ public class Currency {
 
     @Column
     private String name;
+
+    @OneToMany(mappedBy = "currency")
+    private List<Wallet> wallets;
 
 }
