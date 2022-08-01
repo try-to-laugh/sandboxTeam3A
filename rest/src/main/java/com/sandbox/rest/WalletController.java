@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/budget/wallet")
+@RequestMapping("/wallets")
 @RequiredArgsConstructor
 public class WalletController {
     private final WalletService walletService;
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity deleteWallet(@PathVariable Long id) {
+    public ResponseEntity deleteWalletById(@PathVariable Long id) {
         walletService.deleteById(id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

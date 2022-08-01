@@ -1,25 +1,16 @@
 package com.sandbox.entity;
 
-import lombok.Data;
+public enum Currency {
+    USD("USD"),
+    EURO("EURO");
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+    private final String currency;
 
-@Entity
-@Table(name = "currencies")
-@Data
-public class Currency {
+    Currency(String currency) {
+        this.currency = currency;
+    }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private Long id;
-
-    @Column
-    private String name;
-
+    public String getCurrency() {
+        return currency;
+    }
 }

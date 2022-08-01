@@ -2,9 +2,11 @@ package com.sandbox.service;
 
 import com.sandbox.entity.User;
 import com.sandbox.entity.Wallet;
-import com.sandbox.exceptionHandler.exceptions.WalletNotFoundException;
+import com.sandbox.exception.WalletNotFoundException;
 import com.sandbox.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -15,31 +17,30 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional
 public class WalletServiceImpl implements WalletService {
+    private static final Logger log = LoggerFactory.getLogger(WalletServiceImpl.class);
     private final WalletRepository walletRepository;
-    Optional<Wallet> wallet;
 
     @Override
     public void deleteById(Long id) {
-        wallet = Optional.ofNullable(walletRepository.findById(id).orElseThrow(() -> new WalletNotFoundException("Impossible to delete this wallet. Wallet not found with id " + id)));
+        Wallet walletWhichWantToDelete = walletRepository.findById(id).orElseThrow(() -> new WalletNotFoundException("Impossible to delete this wallet. Wallet not found with id " + id));
 
-        if (wallet.get().isDefault()) {
-            changeDefaultWallet(id);
+        if (walletWhichWantToDelete.isDefault()) {
+            User walletOwner = walletWhichWantToDelete.getUser();
+            walletRepository.deleteById(id);
+            changeDefaultWallet(walletOwner);
         }
-        walletRepository.deleteById(id);
+
+        log.info("The wallet was successfully deleted");
     }
 
-    private void changeDefaultWallet(long deletedWalletId) {
-        User walletOwner = wallet.get().getUser();
-        Optional<Wallet> newDefaultWalletOptional = walletOwner.getWallets().stream().filter(x -> x.getId() != deletedWalletId)
-                .max(Comparator.comparing(Wallet::getBalance));
-        if (newDefaultWalletOptional.isEmpty()) {
-            return;
+    private void changeDefaultWallet(User walletOwner) {
+        if (!walletOwner.getWallets().isEmpty()) {
+            Optional<Wallet> newDefaultWalletOptional = walletOwner.getWallets().stream()
+                    .max(Comparator.comparing(Wallet::getBalance));
+            newDefaultWalletOptional.ifPresent(wallet -> wallet.setDefault(true));
+            log.info("Default wallet successfully changed");
         }
-        // todo Change wallet
+        log.info("User had only one wallet and it was default");
     }
 
-    @Override
-    public Optional<Wallet> findById(Long id) {
-        return walletRepository.findById(id);
-    }
 }
