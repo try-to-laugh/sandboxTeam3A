@@ -6,6 +6,8 @@ import lombok.Data;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,8 +36,7 @@ public class Wallet implements Serializable {
     @Column(nullable = false)
     private boolean isDefault;
 
-    @ManyToOne(optional = false, cascade = CascadeType.DETACH)
-    @JoinColumn(name = "currency_id", referencedColumnName = "id")
+    @Enumerated(EnumType.STRING)
     private Currency currency;
 
     @ManyToOne(optional = false, cascade = CascadeType.DETACH)
