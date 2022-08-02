@@ -1,4 +1,4 @@
-package com.sandbox.entities;
+package com.sandbox.entity;
 
 import lombok.Data;
 

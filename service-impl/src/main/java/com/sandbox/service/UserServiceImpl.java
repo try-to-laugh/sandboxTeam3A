@@ -2,9 +2,9 @@ package com.sandbox.service;
 
 import com.sandbox.dto.RoleDto;
 import com.sandbox.dto.UserDto;
-import com.sandbox.entities.User;
-import com.sandbox.mappers.RoleMapper;
-import com.sandbox.mappers.UserMapper;
+import com.sandbox.entity.User;
+import com.sandbox.mapper.RoleMapper;
+import com.sandbox.mapper.UserMapper;
 import com.sandbox.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
