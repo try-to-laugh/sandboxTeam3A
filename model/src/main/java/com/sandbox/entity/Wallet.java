@@ -1,6 +1,8 @@
 package com.sandbox.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.CascadeType;
@@ -22,6 +24,8 @@ import java.math.BigDecimal;
 @Table(name = "wallets")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Wallet implements Serializable {
 
     @Id

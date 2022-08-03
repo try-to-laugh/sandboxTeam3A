@@ -2,7 +2,7 @@ package com.sandbox.service;
 
 import com.sandbox.entity.User;
 import com.sandbox.entity.Wallet;
-import com.sandbox.exception.WalletNotFoundException;
+import com.sandbox.exception.ResourceNotFoundException;
 import com.sandbox.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public void deleteById(Long id) {
-        Wallet walletWhichWantToDelete = walletRepository.findById(id).orElseThrow(() -> new WalletNotFoundException("Impossible to delete this wallet. Wallet not found with id " + id));
+        Wallet walletWhichWantToDelete = walletRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Impossible to delete this wallet. Wallet not found with id " + id));
 
         if (walletWhichWantToDelete.isDefault()) {
             User walletOwner = walletWhichWantToDelete.getUser();
