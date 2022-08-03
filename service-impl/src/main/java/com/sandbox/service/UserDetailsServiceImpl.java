@@ -16,8 +16,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserMapper userMapper;
 
     @Override
-    public UserDetails loadUserByUsername(String email) {
-        UserDto userDto = userService.findUserByEmail(email);
+    public UserDetails loadUserByUsername(String username) {
+        UserDto userDto = userService.findUserByUsername(username);
         return new UserDetailsImpl(userMapper.toUser(userDto));
     }
 }

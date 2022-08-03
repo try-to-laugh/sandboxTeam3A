@@ -1,6 +1,8 @@
 package com.sandbox.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +14,9 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "roles")
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class Role implements Serializable {
 
     @Id
@@ -21,5 +25,4 @@ public class Role implements Serializable {
     private Long id;
 
     private String name;
-
 }

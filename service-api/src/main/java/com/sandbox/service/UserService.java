@@ -2,7 +2,6 @@ package com.sandbox.service;
 
 import com.sandbox.dto.RoleDto;
 import com.sandbox.dto.UserDto;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
@@ -12,7 +11,7 @@ public interface UserService {
 
     List<UserDto> findAllUsers();
 
-    UserDto findUserByEmail(String email);
+    UserDto findUserByUsername(String username);
 
     void saveUser(UserDto userDto);
 

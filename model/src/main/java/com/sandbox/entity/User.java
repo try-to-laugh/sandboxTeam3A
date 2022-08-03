@@ -1,6 +1,7 @@
 package com.sandbox.entity;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.CascadeType;
@@ -23,6 +24,7 @@ import java.util.Set;
 @Table(name = "users")
 @Getter
 @Setter
+@RequiredArgsConstructor
 public class User implements Serializable {
 
     @Id
@@ -35,9 +37,6 @@ public class User implements Serializable {
 
     @Column
     private String surname;
-
-    @Column
-    private String email;
 
     @Column
     private String username;

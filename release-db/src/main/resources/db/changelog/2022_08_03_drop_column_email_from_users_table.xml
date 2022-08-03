@@ -1,0 +1,13 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+    <changeSet id="2022_08_03_drop_column_email_from_users_table" author="Artsiom Vaskevich">
+        <dropColumn tableName="users">
+            <column name="email"/>
+        </dropColumn>
+        <rollback>
+            ALTER TABLE users ADD COLUMN email varchar(255);
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
