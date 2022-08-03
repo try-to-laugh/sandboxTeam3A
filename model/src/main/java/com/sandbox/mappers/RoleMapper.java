@@ -1,7 +1,7 @@
 package com.sandbox.mappers;
 
 import com.sandbox.dto.RoleDto;
-import com.sandbox.entity.Role;
+import com.sandbox.entities.Role;
 import org.mapstruct.Mapper;
 
 import java.util.Set;

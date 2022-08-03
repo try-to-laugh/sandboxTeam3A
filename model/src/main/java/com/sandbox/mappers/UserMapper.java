@@ -1,7 +1,7 @@
 package com.sandbox.mappers;
 
 import com.sandbox.dto.UserDto;
-import com.sandbox.entity.User;
+import com.sandbox.entities.User;
 import org.mapstruct.Mapper;
 
 import java.util.List;

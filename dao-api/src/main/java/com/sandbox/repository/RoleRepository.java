@@ -1,6 +1,6 @@
 package com.sandbox.repository;
 
-import com.sandbox.entity.Role;
+import com.sandbox.entities.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

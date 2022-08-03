@@ -1,7 +1,7 @@
 package com.sandbox;
 
-import com.sandbox.entity.Role;
-import com.sandbox.entity.User;
+import com.sandbox.entities.Role;
+import com.sandbox.entities.User;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

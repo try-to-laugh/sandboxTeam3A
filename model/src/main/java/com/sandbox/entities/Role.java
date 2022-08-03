@@ -1,4 +1,4 @@
-package com.sandbox.entity;
+package com.sandbox.entities;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
