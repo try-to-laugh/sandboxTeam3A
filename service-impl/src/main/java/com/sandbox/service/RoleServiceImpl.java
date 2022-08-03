@@ -1,7 +1,7 @@
 package com.sandbox.service;
 
 import com.sandbox.dto.RoleDto;
-import com.sandbox.mappers.RoleMapper;
+import com.sandbox.mapper.RoleMapper;
 import com.sandbox.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

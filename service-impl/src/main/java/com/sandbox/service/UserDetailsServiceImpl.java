@@ -1,7 +1,7 @@
 package com.sandbox.service;
 
 import com.sandbox.dto.UserDto;
-import com.sandbox.mappers.UserMapper;
+import com.sandbox.mapper.UserMapper;
 import com.sandbox.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

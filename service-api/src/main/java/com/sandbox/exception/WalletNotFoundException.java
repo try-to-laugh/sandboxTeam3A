@@ -1,4 +1,4 @@
-package com.sandbox.exception;
+package com.sandbox.exceptionHandler.exceptions;
 
 public class WalletNotFoundException extends ResourceNotFoundException {
     public WalletNotFoundException(String message) {
