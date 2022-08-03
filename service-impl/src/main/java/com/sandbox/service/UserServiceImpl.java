@@ -30,8 +30,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto findUserByEmail(String email) {
-        return userMapper.toUserDto(userRepository.findByEmail(email)
+    public UserDto findUserByUsername(String username) {
+        return userMapper.toUserDto(userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found")));
     }
 

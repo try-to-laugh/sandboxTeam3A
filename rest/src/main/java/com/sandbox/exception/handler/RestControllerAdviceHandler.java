@@ -1,4 +1,4 @@
-package com.sandbox.exception_handler;
+package com.sandbox.exception.handler;
 
 import com.sandbox.exception.BudgetRuntimeException;
 import com.sandbox.exception.ResourceNotFoundException;

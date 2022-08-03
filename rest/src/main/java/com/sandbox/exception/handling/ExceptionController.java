@@ -1,4 +1,4 @@
-package com.sandbox.exception_handling;
+package com.sandbox.exception.handling;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

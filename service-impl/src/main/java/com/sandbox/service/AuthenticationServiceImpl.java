@@ -25,8 +25,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(),
                     request.getPassword()));
         } catch (AuthenticationException e){
-            throw new UnauthorizedException("Invalid Email or Password");
+            throw new UnauthorizedException("Invalid Email or Password", e);
         }
-        return userService.findUserByEmail(request.getUsername());
+        return userService.findUserByUsername(request.getUsername());
     }
 }
