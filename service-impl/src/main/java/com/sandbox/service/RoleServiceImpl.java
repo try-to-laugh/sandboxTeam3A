@@ -1,8 +1,9 @@
 package com.sandbox.service;
 
 import com.sandbox.dto.RoleDto;
+
 import com.sandbox.mapper.RoleMapper;
-import com.sandbox.repository.RoleRepository;
+import com.sandbox.repository.RoleRepositoryJpa;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import javax.transaction.Transactional;
 @Transactional
 public class RoleServiceImpl implements RoleService {
 
-    private final RoleRepository roleRepository;
+    private final RoleRepositoryJpa roleRepository;
     private final RoleMapper roleMapper;
 
     @Override

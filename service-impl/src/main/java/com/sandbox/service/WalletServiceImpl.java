@@ -3,7 +3,7 @@ package com.sandbox.service;
 import com.sandbox.entity.User;
 import com.sandbox.entity.Wallet;
 import com.sandbox.exception.WalletNotFoundException;
-import com.sandbox.repository.WalletRepository;
+import com.sandbox.repository.WalletRepositoryJpa;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ import java.util.Optional;
 @Transactional
 public class WalletServiceImpl implements WalletService {
     private static final Logger log = LoggerFactory.getLogger(WalletServiceImpl.class);
-    private final WalletRepository walletRepository;
+    private final WalletRepositoryJpa walletRepository;
 
     @Override
     public void deleteById(Long id) {
