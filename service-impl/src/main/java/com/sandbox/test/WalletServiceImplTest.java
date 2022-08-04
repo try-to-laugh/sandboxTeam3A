@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 
@@ -33,7 +34,7 @@ class WalletServiceImplTest {
     void deleteById() {
         Wallet wallet = new Wallet(1L, "w1", new BigDecimal(44), true, Currency.USD, new User());
         Mockito.doAnswer(delete -> {
-                    String deleted ="deleted";
+                    String deleted = "deleted";
                     assertEquals("deleted", deleted);
                     return null;
                 }
@@ -45,7 +46,9 @@ class WalletServiceImplTest {
 
     @Test
     public void walletNotExistForDeletingTest() {
-        Mockito.doThrow(ResourceNotFoundException.class)
-                .when(mockWalletRepository).deleteById(1L);
+        Wallet wallet = new Wallet(1L, "w1", new BigDecimal(44), true, Currency.USD, new User());
+        assertThatThrownBy(() -> walletService.deleteById(1L))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Impossible to delete this wallet. Wallet not found with id " + wallet.getId());
     }
 }
