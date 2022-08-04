@@ -2,7 +2,6 @@ package com.sandbox.exception.handler;
 
 import com.sandbox.exception.BudgetRuntimeException;
 import com.sandbox.exception.ResourceNotFoundException;
-import com.sandbox.exception.WalletNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -42,13 +41,6 @@ public class RestControllerAdviceHandler extends ResponseEntityExceptionHandler 
     public ResponseEntity<Object> resourceNotFoundException(
             ResourceNotFoundException ex, WebRequest request) {
         log.info(LOGGER_RESOURCE_NOT_FOUND_EXCEPTION, HttpStatus.NOT_FOUND, ex);
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
-    }
-
-    @ExceptionHandler(value = {WalletNotFoundException.class})
-    public ResponseEntity<Object> walletNotFoundException(
-            WalletNotFoundException ex, WebRequest request) {
-        log.info("Exception: {}, {}", HttpStatus.NOT_FOUND, ex.getCause(), ex);
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 

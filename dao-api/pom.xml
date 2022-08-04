@@ -14,7 +14,8 @@
     <dependencies>
         <dependency>
             <groupId>com.sandbox</groupId>
-            <artifactId>model</artifactId>
+            <artifactId>dao-impl</artifactId>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>
