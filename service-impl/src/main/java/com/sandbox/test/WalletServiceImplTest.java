@@ -3,7 +3,7 @@ package com.sandbox.test;
 import com.sandbox.entity.Currency;
 import com.sandbox.entity.User;
 import com.sandbox.entity.Wallet;
-import com.sandbox.exception.ResourceNotFoundException;
+import com.sandbox.exception.WalletNotFoundException;
 import com.sandbox.repository.WalletRepository;
 import com.sandbox.service.WalletServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -48,7 +48,7 @@ class WalletServiceImplTest {
     public void walletNotExistForDeletingTest() {
         Wallet wallet = new Wallet(1L, "w1", new BigDecimal(44), true, Currency.USD, new User());
         assertThatThrownBy(() -> walletService.deleteById(1L))
-                .isInstanceOf(ResourceNotFoundException.class)
+                .isInstanceOf(WalletNotFoundException.class)
                 .hasMessage("Impossible to delete this wallet. Wallet not found with id " + wallet.getId());
     }
 }
