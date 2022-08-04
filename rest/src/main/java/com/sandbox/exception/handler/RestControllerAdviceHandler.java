@@ -16,7 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RestControllerAdviceHandler extends ResponseEntityExceptionHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(RestControllerAdviceHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RestControllerAdviceHandler.class);
 
     private static final String LOGGER_SERVER_EXCEPTION = "Server exception: {}";
     private static final String LOGGER_BAD_REQUEST_EXCEPTION = "Bad request exception: {}";
@@ -26,28 +26,28 @@ public class RestControllerAdviceHandler extends ResponseEntityExceptionHandler 
 
     @ExceptionHandler(value = {Throwable.class})
     public ResponseEntity<Object> handleException(Throwable ex) {
-        log.error(LOGGER_SERVER_EXCEPTION, ex.getMessage());
+        LOG.error(LOGGER_SERVER_EXCEPTION, ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(value = {BudgetRuntimeException.class})
     public ResponseEntity<Object> budgetRuntimeException(
             BudgetRuntimeException ex, WebRequest request) {
-        log.info(LOGGER_BAD_REQUEST_EXCEPTION, HttpStatus.BAD_REQUEST, ex);
+        LOG.info(LOGGER_BAD_REQUEST_EXCEPTION, HttpStatus.BAD_REQUEST, ex);
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(value = {ResourceNotFoundException.class})
     public ResponseEntity<Object> resourceNotFoundException(
             ResourceNotFoundException ex, WebRequest request) {
-        log.info(LOGGER_RESOURCE_NOT_FOUND_EXCEPTION, HttpStatus.NOT_FOUND, ex);
+        LOG.info(LOGGER_RESOURCE_NOT_FOUND_EXCEPTION, HttpStatus.NOT_FOUND, ex);
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler(value = {AuthenticationException.class})
     public ResponseEntity<Object> unauthorizedException(
             AuthenticationException ex, WebRequest request) {
-        log.info(LOGGER_UNAUTHORIZED_EXCEPTION, HttpStatus.UNAUTHORIZED, ex);
+        LOG.info(LOGGER_UNAUTHORIZED_EXCEPTION, HttpStatus.UNAUTHORIZED, ex);
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
     }
 }

@@ -17,7 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional
 public class WalletServiceImpl implements WalletService {
-    private static final Logger log = LoggerFactory.getLogger(WalletServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WalletServiceImpl.class);
     private final WalletRepositoryJpa walletRepository;
 
     @Override
@@ -30,7 +30,7 @@ public class WalletServiceImpl implements WalletService {
             changeDefaultWallet(walletOwner);
         }
 
-        log.info("The wallet was successfully deleted");
+        LOG.info("The wallet was successfully deleted");
     }
 
     private void changeDefaultWallet(User walletOwner) {
@@ -38,9 +38,9 @@ public class WalletServiceImpl implements WalletService {
             Optional<Wallet> newDefaultWalletOptional = walletOwner.getWallets().stream()
                     .max(Comparator.comparing(Wallet::getBalance));
             newDefaultWalletOptional.ifPresent(wallet -> wallet.setDefault(true));
-            log.info("Default wallet successfully changed");
+            LOG.info("Default wallet successfully changed");
         }
-        log.info("User had only one wallet and it was default");
+        LOG.info("User had only one wallet and it was default");
     }
 
 }
