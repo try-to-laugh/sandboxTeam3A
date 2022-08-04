@@ -3,6 +3,9 @@ package com.sandbox.exceptionHandler;
 import com.sandbox.exception.BudgetRuntimeException;
 import com.sandbox.exception.ResourceNotFoundException;
 import com.sandbox.exception.WalletNotFoundException;
+import com.sandbox.exception.WalletWithSameNameAndCurrencyExist;
+import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
+import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +15,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.sql.SQLException;
 
 @ControllerAdvice
 public class RestControllerAdviceHandler extends ResponseEntityExceptionHandler {
@@ -44,4 +49,12 @@ public class RestControllerAdviceHandler extends ResponseEntityExceptionHandler 
         log.info("Exception: {}, {}", HttpStatus.NOT_FOUND, ex.getCause(), ex);
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
+
+    @ExceptionHandler(value = {WalletWithSameNameAndCurrencyExist.class})
+    public ResponseEntity<Object> walletWithSameNameAndCurrencyExist(
+            WalletWithSameNameAndCurrencyExist ex, WebRequest request) {
+        log.info("Exception: {}, {}", HttpStatus.BAD_REQUEST, ex.getCause(), ex);
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
 }

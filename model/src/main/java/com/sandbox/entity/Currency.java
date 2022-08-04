@@ -9,8 +9,8 @@ public enum Currency {
     UAH("UAH"),
     EUR("EUR");
 
-    Currency(String currency){
+
+    Currency(String currency) {
 
     }
-
 }

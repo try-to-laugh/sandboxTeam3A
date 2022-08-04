@@ -2,13 +2,26 @@ package com.sandbox.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -19,6 +32,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class Wallet implements Serializable {
 
     @Id
@@ -27,13 +41,14 @@ public class Wallet implements Serializable {
     private Long id;
 
     @Column
+    @Size(min = 1, max = 30,message = "Name should be shorter than 30 symbols")
     private String name;
 
     @Column
     private BigDecimal balance;
 
-    @Column
-    private boolean isDefault;
+    @Column(name = "is_default")
+    private boolean Default;
 
     @Enumerated(EnumType.STRING)
     private Currency currency;
