@@ -1,7 +1,7 @@
 package com.sandbox.service;
 
 import com.sandbox.dto.UserDto;
-import com.sandbox.mappers.UserMapper;
+import com.sandbox.mapper.UserMapper;
 import com.sandbox.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,8 +16,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserMapper userMapper;
 
     @Override
-    public UserDetails loadUserByUsername(String email) {
-        UserDto userDto = userService.findUserByEmail(email);
+    public UserDetails loadUserByUsername(String username) {
+        UserDto userDto = userService.findUserByUsername(username);
         return new UserDetailsImpl(userMapper.toUser(userDto));
     }
 }

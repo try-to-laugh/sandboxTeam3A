@@ -10,8 +10,7 @@ import java.util.Optional;
 @Repository
 public interface WalletRepository extends JpaRepository<Wallet, Long> {
 
-    @Query("SELECT w from Wallet w where w.Default=?1")
+    @Query("SELECT w from Wallet w where w._default=?1")
     Optional<Wallet> findByDefault(Boolean _default);
-
 
 }

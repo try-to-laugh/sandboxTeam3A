@@ -1,4 +1,4 @@
-package com.sandbox.mappers;
+package com.sandbox.mapper;
 
 import com.sandbox.dto.WalletDto;
 import com.sandbox.entity.Wallet;

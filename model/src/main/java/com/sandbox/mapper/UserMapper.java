@@ -1,4 +1,4 @@
-package com.sandbox.mappers;
+package com.sandbox.mapper;
 
 import com.sandbox.dto.UserDto;
 import com.sandbox.entity.User;

@@ -1,12 +1,12 @@
 package com.sandbox.exception;
 
-public class WalletWithSameNameAndCurrencyExist extends BudgetRuntimeException{
+public class WalletWithSameNameAndCurrencyExist extends BudgetRuntimeException {
 
-    public WalletWithSameNameAndCurrencyExist(String message){
+    public WalletWithSameNameAndCurrencyExist(String message) {
         super(message);
     }
 
-    public WalletWithSameNameAndCurrencyExist(String message, Throwable cause){
+    public WalletWithSameNameAndCurrencyExist(String message, Throwable cause) {
         super(message, cause);
     }
 }
