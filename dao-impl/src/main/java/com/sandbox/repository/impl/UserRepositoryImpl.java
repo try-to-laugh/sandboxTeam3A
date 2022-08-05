@@ -14,22 +14,22 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
-    private final UserRepositoryJpa userRepository;
+    private final UserRepositoryJpa userRepositoryJpa;
     private final UserMapper userMapper;
 
     @Override
     public Optional<UserDto> findByUsername(String username) {
-        Optional<User> user = userRepository.findByUsername(username);
+        Optional<User> user = userRepositoryJpa.findByUsername(username);
         return user.map(userMapper::toUserDto);
     }
 
     @Override
     public List<UserDto> findAll() {
-        return userMapper.toUsersDtoList(userRepository.findAll());
+        return userMapper.toUsersDtoList(userRepositoryJpa.findAll());
     }
 
     @Override
     public void save(UserDto userDto) {
-        userRepository.save(userMapper.toUser(userDto));
+        userRepositoryJpa.save(userMapper.toUser(userDto));
     }
 }

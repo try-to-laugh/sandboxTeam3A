@@ -1,9 +1,9 @@
 package com.sandbox.service;
 
-import com.sandbox.entity.User;
-import com.sandbox.entity.Wallet;
+import com.sandbox.dto.UserDto;
+import com.sandbox.dto.WalletDto;
 import com.sandbox.exception.WalletNotFoundException;
-import com.sandbox.repository.WalletRepositoryJpa;
+import com.sandbox.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,25 +18,27 @@ import java.util.Optional;
 @Transactional
 public class WalletServiceImpl implements WalletService {
     private static final Logger LOG = LoggerFactory.getLogger(WalletServiceImpl.class);
-    private final WalletRepositoryJpa walletRepository;
+    private final WalletRepository walletRepository;
 
     @Override
     public void deleteById(Long id) {
-        Wallet walletWhichWantToDelete = walletRepository.findById(id).orElseThrow(() -> new WalletNotFoundException("Impossible to delete this wallet. Wallet not found with id " + id));
+        WalletDto walletWhichWantToDelete = walletRepository.findById(id).orElseThrow(() -> new WalletNotFoundException("Impossible to delete this wallet. Wallet not found with id " + id));
 
         if (walletWhichWantToDelete.isDefault()) {
-            User walletOwner = walletWhichWantToDelete.getUser();
+            UserDto walletOwner = walletWhichWantToDelete.getUser();
             walletRepository.deleteById(id);
             changeDefaultWallet(walletOwner);
         }
 
+        walletRepository.deleteById(id);
+
         LOG.info("The wallet was successfully deleted");
     }
 
-    private void changeDefaultWallet(User walletOwner) {
+    private void changeDefaultWallet(UserDto walletOwner) {
         if (!walletOwner.getWallets().isEmpty()) {
-            Optional<Wallet> newDefaultWalletOptional = walletOwner.getWallets().stream()
-                    .max(Comparator.comparing(Wallet::getBalance));
+            Optional<WalletDto> newDefaultWalletOptional = walletOwner.getWallets().stream()
+                    .max(Comparator.comparing(WalletDto::getBalance));
             newDefaultWalletOptional.ifPresent(wallet -> wallet.setDefault(true));
             LOG.info("Default wallet successfully changed");
         }
