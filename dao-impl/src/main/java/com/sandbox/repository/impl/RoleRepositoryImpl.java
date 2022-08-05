@@ -19,4 +19,10 @@ public class RoleRepositoryImpl implements RoleRepository {
         Optional<Role> role = roleRepositoryJpa.findByName(name);
         return role.map(roleMapper::toRoleDto);
     }
+
+    @Override
+    public RoleDto save(RoleDto roleDto) {
+        Role role = roleMapper.toRole(roleDto);
+        return roleMapper.toRoleDto(roleRepositoryJpa.save(role));
+    }
 }

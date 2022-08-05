@@ -8,4 +8,5 @@ import java.util.Optional;
 @Repository
 public interface RoleRepository {
     Optional<RoleDto> findByName(String name);
+    RoleDto save(RoleDto roleDto);
 }
