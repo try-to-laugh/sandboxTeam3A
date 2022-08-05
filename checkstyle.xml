@@ -33,7 +33,7 @@
     <module name="FileLength"/>
     <module name="LineLength">
         <property name="fileExtensions" value="java"/>
-        <property name="max" value="70"/>
+        <property name="max" value="120"/>
     </module>
 
     <!-- Checks for whitespace                               -->
@@ -50,26 +50,6 @@
     </module>
 
     <module name="TreeWalker">
-
-        <!-- Checks for Javadoc comments.                     -->
-        <!-- See https://checkstyle.org/config_javadoc.html -->
-        <!-- Checks that Javadocs are located at the correct position -->
-        <module name="InvalidJavadocPosition"/>
-
-        <!-- Checks the Javadoc of a method or constructor. -->
-        <module name="JavadocMethod"/>
-
-        <!-- Checks the Javadoc comments for type definitions. By default, does not check for author or version tags. -->
-        <module name="JavadocType"/>
-
-        <!-- Checks that a variable has a Javadoc comment -->
-        <module name="JavadocVariable"/>
-
-        <!-- Validates Javadoc comments to help ensure they are well formed -->
-        <module name="JavadocStyle"/>
-
-        <!-- Checks for missing Javadoc comments for a method or constructor. -->
-        <module name="MissingJavadocMethod"/>
 
         <!-- Checks for Naming Conventions.                  -->
         <!-- See https://checkstyle.org/config_naming.html -->

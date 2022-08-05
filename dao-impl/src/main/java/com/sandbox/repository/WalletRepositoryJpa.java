@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface WalletRepositoryJpa extends JpaRepository<Wallet, Long> {
-    void deleteById(Long id);
 
+    void deleteById(Long id);
 }
