@@ -6,9 +6,11 @@ import com.sandbox.mapper.RoleMapper;
 import com.sandbox.repository.RoleRepository;
 import com.sandbox.repository.RoleRepositoryJpa;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 @RequiredArgsConstructor
 public class RoleRepositoryImpl implements RoleRepository {
     private final RoleRepositoryJpa roleRepositoryJpa;

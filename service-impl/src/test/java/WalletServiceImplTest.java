@@ -1,5 +1,3 @@
-package com.sandbox.test;
-
 import com.sandbox.entity.Currency;
 import com.sandbox.entity.User;
 import com.sandbox.entity.Wallet;
