@@ -1,25 +1,31 @@
-package com.sandbox.entities;
+package com.sandbox.entity;
 
-import lombok.Data;
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.Enumerated;
+import javax.persistence.EnumType;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "wallets")
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Wallet implements Serializable {
 
     @Id
@@ -27,20 +33,20 @@ public class Wallet implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String name;
 
     @Column
     private BigDecimal balance;
 
-    @Column(nullable = false)
+    @Column
     private boolean isDefault;
 
-    @Enumerated(EnumType.STRING)
+    @Column
+    @Enumerated(value = EnumType.STRING)
     private Currency currency;
 
-    @ManyToOne(optional = false, cascade = CascadeType.DETACH)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne(optional = false, cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
-
 }

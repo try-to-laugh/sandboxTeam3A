@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface WalletRepository extends JpaRepository<Wallet, Long> {
 
     Wallet save(Wallet wallet);
+
+    void deleteById(Long id);
 }

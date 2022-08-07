@@ -1,38 +1,46 @@
 package com.sandbox.service;
 
-import com.sandbox.UserDetailsImpl;
-import com.sandbox.dto.WalletDto;
-import com.sandbox.entities.User;
-import com.sandbox.entities.Wallet;
-import com.sandbox.mappers.WalletMapper;
-import com.sandbox.repository.UserRepository;
+import com.sandbox.entity.User;
+import com.sandbox.entity.Wallet;
+import com.sandbox.exception.WalletNotFoundException;
 import com.sandbox.repository.WalletRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
 import javax.transaction.Transactional;
+import java.util.Comparator;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class WalletServiceImpl implements WalletService{
-
+public class WalletServiceImpl implements WalletService {
+    private static final Logger log = LoggerFactory.getLogger(WalletServiceImpl.class);
     private final WalletRepository walletRepository;
-    private final WalletMapper walletMapper;
-    private final UserRepository userRepository;
 
     @Override
-    public Wallet createWallet(WalletDto walletDto){
-        UserDetailsImpl userDetails =(UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findById(userDetails.getId()).get();
-        if(user.getWallets().isEmpty()) {
-            walletDto.setDefault(true);
+    public void deleteById(Long id) {
+        Wallet walletWhichWantToDelete = walletRepository.findById(id).orElseThrow(() -> new WalletNotFoundException("Impossible to delete this wallet. Wallet not found with id " + id));
+
+        if (walletWhichWantToDelete.isDefault()) {
+            User walletOwner = walletWhichWantToDelete.getUser();
+            walletRepository.deleteById(id);
+            changeDefaultWallet(walletOwner);
         }
-        Wallet walletToCreate = walletMapper.toWallet(walletDto);
-        walletToCreate.setUser(user);
-        return walletRepository.save(walletToCreate);
+
+        log.info("The wallet was successfully deleted");
     }
+
+    private void changeDefaultWallet(User walletOwner) {
+        if (!walletOwner.getWallets().isEmpty()) {
+            Optional<Wallet> newDefaultWalletOptional = walletOwner.getWallets().stream()
+                    .max(Comparator.comparing(Wallet::getBalance));
+            newDefaultWalletOptional.ifPresent(wallet -> wallet.setDefault(true));
+            log.info("Default wallet successfully changed");
+        }
+        log.info("User had only one wallet and it was default");
+    }
+
 }

@@ -1,6 +1,8 @@
-package com.sandbox.entities;
+package com.sandbox.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,12 +18,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class User implements Serializable {
 
     @Id
@@ -34,9 +37,6 @@ public class User implements Serializable {
 
     @Column
     private String surname;
-
-    @Column
-    private String email;
 
     @Column
     private String username;
@@ -54,5 +54,5 @@ public class User implements Serializable {
 
     @OneToMany
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private List<Wallet> wallets;
+    private Set<Wallet> wallets = new HashSet<>();
 }
