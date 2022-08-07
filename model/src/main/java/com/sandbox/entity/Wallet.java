@@ -39,8 +39,8 @@ public class Wallet implements Serializable {
     @Column
     private BigDecimal balance;
 
-    @Column
-    private boolean isDefault;
+    @Column(name = "is_default")
+    private boolean defaultStatus;
 
     @Column
     @Enumerated(value = EnumType.STRING)
@@ -49,4 +49,35 @@ public class Wallet implements Serializable {
     @ManyToOne(optional = false, cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Wallet wallet = (Wallet) o;
+
+        if (name != null ? !name.equals(wallet.name) :
+                wallet.name != null) {
+            return false;
+        }
+        if (currency != wallet.currency) {
+            return false;
+        }
+        return user != null ? user.equals(wallet.user) :
+                wallet.user == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result +
+                (currency != null ? currency.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        return result;
+    }
 }

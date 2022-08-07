@@ -1,7 +1,8 @@
-package com.sandbox.mappers;
+package com.sandbox.mapper;
 
-import com.sandbox.dto.WalletDto;
-import com.sandbox.entities.Wallet;
+import com.sandbox.entity.Wallet;
+import com.sandbox.model.WalletRequestDto;
+import com.sandbox.model.WalletResponseDto;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -9,9 +10,15 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface WalletMapper {
 
-    WalletDto toWalletDto(Wallet wallet);
+    WalletRequestDto fromWalletToRequestDto (Wallet wallet);
 
-    Wallet toWallet(WalletDto walletDto);
+    WalletRequestDto fromWalletResponseDtoToWalletRequestDto (WalletResponseDto walletResponseDto);
 
-    List<WalletDto> toWalletDtoList(List<Wallet> wallets);
+    WalletResponseDto fromWalletToWalletResponseDto (Wallet wallet);
+
+    WalletResponseDto fromWalletRequestDtoToWalletResponseDto (WalletRequestDto walletRequestDtoDto);
+
+    Wallet fromWalletRequestDtoToWallet (WalletRequestDto walletRequestDto);
+
+    Wallet fromWalletResponseDtoToWallet (WalletResponseDto walletResponseDto);
 }
