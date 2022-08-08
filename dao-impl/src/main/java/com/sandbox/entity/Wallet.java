@@ -40,7 +40,7 @@ public class Wallet implements Serializable {
     private BigDecimal balance;
 
     @Column(name = "is_default")
-    private boolean defaultStatus;
+    private boolean defaultWallet;
 
     @Enumerated(EnumType.STRING)
     private Currency currency;

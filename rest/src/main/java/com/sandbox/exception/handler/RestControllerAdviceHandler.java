@@ -2,7 +2,6 @@ package com.sandbox.exception.handler;
 
 import com.sandbox.exception.BudgetRuntimeException;
 import com.sandbox.exception.ResourceNotFoundException;
-import com.sandbox.exception.WalletWithSameNameAndCurrencyExist;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -44,14 +43,6 @@ public class RestControllerAdviceHandler extends ResponseEntityExceptionHandler 
         LOG.info(LOGGER_RESOURCE_NOT_FOUND_EXCEPTION, HttpStatus.NOT_FOUND, ex);
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
-
-    @ExceptionHandler(value = {WalletWithSameNameAndCurrencyExist.class})
-    public ResponseEntity<Object> walletWithSameNameAndCurrencyExist(
-            WalletWithSameNameAndCurrencyExist ex, WebRequest request) {
-        LOG.info(LOGGER_BAD_REQUEST_EXCEPTION, HttpStatus.BAD_REQUEST, ex);
-        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-    }
-
 
     @ExceptionHandler(value = {AuthenticationException.class})
     public ResponseEntity<Object> unauthorizedException(

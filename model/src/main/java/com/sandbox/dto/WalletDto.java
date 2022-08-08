@@ -9,7 +9,7 @@ public class WalletDto {
     private Long id;
     private String name;
     private BigDecimal balance;
-    private boolean isDefault;
+    private boolean defaultWallet;
     private CurrencyDto currency;
-    private UserDto user;
+    private Long userId;
 }
