@@ -1,10 +1,8 @@
-package com.sandbox.test;
-
 import com.sandbox.entity.Currency;
 import com.sandbox.entity.User;
 import com.sandbox.entity.Wallet;
 import com.sandbox.exception.WalletNotFoundException;
-import com.sandbox.repository.WalletRepository;
+import com.sandbox.repository.WalletRepositoryJpa;
 import com.sandbox.service.WalletServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -27,7 +25,7 @@ class WalletServiceImplTest {
     private WalletServiceImpl walletService;
 
     @Mock
-    private WalletRepository mockWalletRepository;
+    private WalletRepositoryJpa mockWalletRepository;
 
 
     @Test

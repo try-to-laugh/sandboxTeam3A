@@ -10,5 +10,4 @@ import java.util.Set;
 public interface RoleSetMapper {
 
     Set<RoleDto> toDtoRoleSet(Set<Role> roles);
-
 }

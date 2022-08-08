@@ -4,6 +4,7 @@ import com.sandbox.api.UsersApi;
 import com.sandbox.dto.UserDto;
 import com.sandbox.config.jwt.JwtTokenProvider;
 import com.sandbox.model.UserLoginDto;
+import com.sandbox.model.UserResponseDto;
 import com.sandbox.service.AuthenticationService;
 import com.sandbox.service.RoleService;
 import com.sandbox.service.UserService;
@@ -24,7 +25,7 @@ import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
-public class AuthenticationRestController implements UsersApi {
+public class UsersController implements UsersApi {
 
     private final UserService userService;
     private final RoleService roleService;
@@ -35,10 +36,25 @@ public class AuthenticationRestController implements UsersApi {
     private String authorizationHeader;
 
     @Override
+    public ResponseEntity<Void> deleteUserById(Long userId) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<UserResponseDto> getUserById(Long userId) {
+        return null;
+    }
+
+    @Override
     public ResponseEntity<Void> login(@Valid UserLoginDto userLoginDto) {
         UserDto userDto = authenticationService.authenticateUserAndGetToken(userLoginDto);
         String token = jwtTokenProvider.createToken(userLoginDto.getUsername(), userService.getUserRoles(userDto));
         return ResponseEntity.ok().header(authorizationHeader, "Bearer " + token).build();
+    }
+
+    @Override
+    public ResponseEntity<Void> logout() {
+        return null;
     }
 
     @PostMapping(path = "/registration")
