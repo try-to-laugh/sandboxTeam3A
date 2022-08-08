@@ -1,11 +1,10 @@
 package com.sandbox.service;
 
-import com.sandbox.model.WalletRequestDto;
-import com.sandbox.model.WalletResponseDto;
+import com.sandbox.dto.WalletDto;
 
 public interface WalletService {
 
-    WalletResponseDto updateWalletById(Long id, WalletRequestDto requestWallet);
+    WalletDto updateWalletById(Long id, WalletDto requestWallet);
 
 
     void deleteById(Long id);

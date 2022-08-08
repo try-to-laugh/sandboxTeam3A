@@ -10,29 +10,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>service-api</artifactId>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>16</source>
-                    <target>16</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
     <dependencies>
         <dependency>
             <groupId>com.sandbox</groupId>
             <artifactId>model</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.sandbox</groupId>
-            <artifactId>rest-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

@@ -3,6 +3,7 @@ package com.sandbox.rest;
 import com.sandbox.api.UsersApi;
 import com.sandbox.dto.UserDto;
 import com.sandbox.config.jwt.JwtTokenProvider;
+import com.sandbox.mapper.UserMapperRest;
 import com.sandbox.model.UserLoginDto;
 import com.sandbox.model.UserResponseDto;
 import com.sandbox.service.AuthenticationService;
@@ -32,6 +33,8 @@ public class UsersController implements UsersApi {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationService authenticationService;
     private final PasswordEncoder passwordEncoder;
+    private final UserMapperRest userMapperRest;
+
     @Value("${jwt.header}")
     private String authorizationHeader;
 
@@ -47,7 +50,7 @@ public class UsersController implements UsersApi {
 
     @Override
     public ResponseEntity<Void> login(@Valid UserLoginDto userLoginDto) {
-        UserDto userDto = authenticationService.authenticateUserAndGetToken(userLoginDto);
+        UserDto userDto = authenticationService.authenticateUserAndGetToken(userMapperRest.fromUserLoginDtoToUserDto(userLoginDto));
         String token = jwtTokenProvider.createToken(userLoginDto.getUsername(), userService.getUserRoles(userDto));
         return ResponseEntity.ok().header(authorizationHeader, "Bearer " + token).build();
     }

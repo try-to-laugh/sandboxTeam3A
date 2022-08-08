@@ -33,6 +33,8 @@
         <spring.module.version>5.7.2</spring.module.version>
         <postgre.version>42.3.6</postgre.version>
         <lombok.version>1.18.24</lombok.version>
+        <rest-api.version>0.0.1-SNAPSHOT</rest-api.version>
+        <mapstruct.version>1.5.2.Final</mapstruct.version>
     </properties>
 
     <dependencyManagement>
@@ -118,6 +120,22 @@
                 <version>${spring.module.version}</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>com.sandbox</groupId>
+                <artifactId>rest-api</artifactId>
+                <version>${rest-api.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>io.springfox</groupId>
+                        <artifactId>springfox-boot-starter</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -153,39 +171,57 @@
                         </execution>
                     </executions>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.5.1</version>
+                    <configuration>
+                        <source>17</source>
+                        <target>17</target>
+                        <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>1.4.2.Final</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.24</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>0.2.0</version>
+                        </path>
+                    </annotationProcessorPaths>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
 
         <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-pmd-plugin</artifactId>
-                    <version>3.17.0</version>
-                    <configuration>
-                        <linkXRef>false</linkXRef>
-                        <targetJdk>17</targetJdk>
-                        <skipEmptyReport>false</skipEmptyReport>
-                        <outputDirectory>reports/pmd/</outputDirectory>
-                        <rulesets>
-                            <ruleset>pmd-ruleset.xml</ruleset>
-                        </rulesets>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>pmd</goal>
-                            </goals>
-                            <phase>validate</phase>
-                        </execution>
-                    </executions>
-                </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>3.17.0</version>
                 <configuration>
-                    <source>17</source>
-                    <target>17</target>
+                    <linkXRef>false</linkXRef>
+                    <targetJdk>17</targetJdk>
+                    <skipEmptyReport>false</skipEmptyReport>
+                    <outputDirectory>reports/pmd/</outputDirectory>
+                    <rulesets>
+                        <ruleset>pmd-ruleset.xml</ruleset>
+                    </rulesets>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>pmd</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

@@ -2,10 +2,12 @@ package com.sandbox.repository.impl;
 
 import com.sandbox.dto.WalletDto;
 import com.sandbox.entity.Wallet;
+import com.sandbox.exception.BudgetRuntimeException;
 import com.sandbox.mapper.WalletMapper;
 import com.sandbox.repository.WalletRepository;
 import com.sandbox.repository.WalletRepositoryJpa;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -24,13 +26,19 @@ public class WalletRepositoryImpl implements WalletRepository {
 
     @Override
     public Optional<WalletDto> findByStatus(Boolean walletStatus) {
-        Optional<Wallet> wallet = walletRepositoryJpa.findByDefaultStatus(walletStatus);
+        Optional<Wallet> wallet = walletRepositoryJpa.findByDefault(walletStatus);
         return wallet.map(walletMapper::toWalletDto);
     }
 
     @Override
     public void save(WalletDto walletDto) {
-        walletRepositoryJpa.saveAndFlush(walletMapper.toWallet(walletDto));
+        try {
+            Wallet savedWallet = walletMapper.toWallet(walletDto);
+            walletRepositoryJpa.saveAndFlush(savedWallet);
+        } catch (DataIntegrityViolationException ex) {
+            throw new BudgetRuntimeException("A wallet with such a name and currency already exists. "
+                    + "Please, change the name", ex);
+        }
     }
 
     @Override

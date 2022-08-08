@@ -18,6 +18,12 @@ public class UserRepositoryImpl implements UserRepository {
     private final UserMapper userMapper;
 
     @Override
+    public Optional<UserDto> findByUserId(Long userId) {
+        Optional<User> user = userRepositoryJpa.findUserById(userId);
+        return user.map(userMapper::toUserDto);
+    }
+
+    @Override
     public Optional<UserDto> findByUsername(String username) {
         Optional<User> user = userRepositoryJpa.findByUsername(username);
         return user.map(userMapper::toUserDto);

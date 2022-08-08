@@ -14,5 +14,4 @@ public interface WalletRepository {
 
     void deleteById(Long id);
 
-
 }
