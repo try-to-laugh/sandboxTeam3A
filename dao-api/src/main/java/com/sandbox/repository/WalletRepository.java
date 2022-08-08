@@ -1,16 +1,18 @@
 package com.sandbox.repository;
 
-import com.sandbox.entity.Wallet;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
+import com.sandbox.dto.WalletDto;
 
 import java.util.Optional;
 
-@Repository
-public interface WalletRepository extends JpaRepository<Wallet, Long> {
+public interface WalletRepository {
 
-    @Query("SELECT w from Wallet w where w._default=?1")
-    Optional<Wallet> findByDefault(Boolean _default);
+    Optional<WalletDto> findById(Long id);
+
+    Optional<WalletDto> findByStatus(Boolean walletStatus);
+
+    void save(WalletDto walletDto);
+
+    void deleteById(Long id);
+
 
 }

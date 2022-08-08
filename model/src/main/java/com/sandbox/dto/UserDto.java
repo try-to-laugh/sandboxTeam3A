@@ -13,4 +13,5 @@ public class UserDto {
     private String username;
     private String password;
     private Set<RoleDto> roles = new HashSet<>();
+    private Set<WalletDto> wallets = new HashSet<>();
 }

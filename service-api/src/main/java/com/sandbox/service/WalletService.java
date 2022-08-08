@@ -7,4 +7,6 @@ public interface WalletService {
 
     WalletResponseDto updateWalletById(Long id, WalletRequestDto requestWallet);
 
+
+    void deleteById(Long id);
 }

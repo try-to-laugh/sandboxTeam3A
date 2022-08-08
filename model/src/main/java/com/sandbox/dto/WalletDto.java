@@ -1,24 +1,15 @@
 package com.sandbox.dto;
 
+import lombok.Data;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sandbox.enums.Currency;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.math.BigDecimal;
 
-import java.io.Serializable;
-
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class WalletDto implements Serializable {
-    private  String name;
-    @JsonProperty(value = "Default")
-    private  boolean _default;
-    private  Currency currency;
-
-    }
-
+@Data
+public class WalletDto {
+    private Long id;
+    private String name;
+    private BigDecimal balance;
+    private boolean isDefault;
+    private CurrencyDto currency;
+    private UserDto user;
+}

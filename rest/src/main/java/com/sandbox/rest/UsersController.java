@@ -25,7 +25,7 @@ import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
-public class AuthenticationRestController implements UsersApi {
+public class UsersController implements UsersApi {
 
     private final UserService userService;
     private final RoleService roleService;

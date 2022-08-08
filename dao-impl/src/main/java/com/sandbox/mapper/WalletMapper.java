@@ -6,23 +6,24 @@ import com.sandbox.model.WalletRequestDto;
 import com.sandbox.model.WalletResponseDto;
 import org.mapstruct.Mapper;
 
-import java.util.List;
-
 @Mapper(componentModel = "spring")
 public interface WalletMapper {
 
     WalletRequestDto fromWalletToRequestDto(Wallet wallet);
 
-    WalletRequestDto fromWalletResponseDtoToWalletRequestDto(WalletResponseDto walletResponseDto);
+    WalletRequestDto fromWalletDtoToWalletRequestDto(WalletDto walletDto);
 
     WalletResponseDto fromWalletToWalletResponseDto(Wallet wallet);
 
-    WalletResponseDto fromWalletRequestDtoToWalletResponseDto(WalletRequestDto walletRequestDtoDto);
+    WalletResponseDto fromWalletDtoToWalletResponseDto(WalletDto walletDto);
 
-    Wallet fromWalletRequestDtoToWallet(WalletRequestDto walletRequestDto);
+    WalletDto fromWalletRequestDtoToWalletDto(WalletRequestDto walletRequestDto);
+
+    WalletDto fromWalletResponseDtoToWalletDto(WalletResponseDto walletResponseDto);
 
     Wallet fromWalletResponseDtoToWallet(WalletResponseDto walletResponseDto);
 
+    WalletDto toWalletDto(Wallet wallet);
 
-    List<WalletDto> toWalletDtoList(List<Wallet> wallets);
+    Wallet toWallet(WalletDto walletDto);
 }

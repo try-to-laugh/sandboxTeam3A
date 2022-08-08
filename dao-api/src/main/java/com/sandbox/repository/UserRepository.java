@@ -1,12 +1,15 @@
 package com.sandbox.repository;
 
-import com.sandbox.entity.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import com.sandbox.dto.UserDto;
 
+import java.util.List;
 import java.util.Optional;
 
-@Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByUsername(String username);
+public interface UserRepository {
+
+    Optional<UserDto> findByUsername(String username);
+
+    List<UserDto> findAll();
+
+    void save(UserDto userDto);
 }
