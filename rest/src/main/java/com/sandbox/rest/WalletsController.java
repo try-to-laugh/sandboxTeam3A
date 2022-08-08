@@ -4,6 +4,7 @@ import com.sandbox.api.WalletsApi;
 import com.sandbox.model.WalletRequestDto;
 import com.sandbox.model.WalletResponseDto;
 import com.sandbox.service.WalletService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.List;
 
-
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/wallets")
+@RequiredArgsConstructor
 public class WalletController implements WalletsApi {
 
     private final WalletService walletService;
@@ -43,14 +43,12 @@ public class WalletController implements WalletsApi {
     }
 
     @Override
-    public ResponseEntity<WalletResponseDto> getWalletById(
-            Long walletId) {
+    public ResponseEntity<WalletResponseDto> getWalletById(Long walletId) {
         return null;
     }
 
     @Override
-    public ResponseEntity<WalletResponseDto> updateWalletById(
-            Long walletId, @Valid WalletRequestDto walletRequestDto) {
+    public ResponseEntity<WalletResponseDto> updateWalletById(Long walletId, @Valid WalletRequestDto walletRequestDto) {
         return null;
     }
 }

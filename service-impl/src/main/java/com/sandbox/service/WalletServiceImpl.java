@@ -1,5 +1,7 @@
 package com.sandbox.service;
 
+import com.sandbox.dto.UserDto;
+import com.sandbox.dto.WalletDto;
 import com.sandbox.UserDetailsImpl;
 import com.sandbox.entity.User;
 import com.sandbox.entity.Wallet;
@@ -14,8 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
@@ -24,7 +26,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Transactional
 public class WalletServiceImpl implements WalletService {
-    private static final Logger log = LoggerFactory.getLogger(WalletServiceImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(WalletServiceImpl.class);
     private final WalletRepository walletRepository;
     private final UserRepository userRepository;
     private final WalletMapper walletMapper;
@@ -58,24 +60,26 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public void deleteById(Long id) {
-        Wallet walletWhichWantToDelete = walletRepository.findById(id).orElseThrow(() -> new WalletNotFoundException("Impossible to delete this wallet. Wallet not found with id " + id));
+        WalletDto walletWhichWantToDelete = walletRepository.findById(id).orElseThrow(() -> new WalletNotFoundException("Impossible to delete this wallet. Wallet not found with id " + id));
 
-        if (walletWhichWantToDelete.isDefaultStatus()) {
-            User walletOwner = walletWhichWantToDelete.getUser();
+        if (walletWhichWantToDelete.isDefault()) {
+            UserDto walletOwner = walletWhichWantToDelete.getUser();
             walletRepository.deleteById(id);
             changeDefaultWallet(walletOwner);
         }
 
-        log.info("The wallet was successfully deleted");
+        walletRepository.deleteById(id);
+
+        LOG.info("The wallet was successfully deleted");
     }
 
-    private void changeDefaultWallet(User walletOwner) {
+    private void changeDefaultWallet(UserDto walletOwner) {
         if (!walletOwner.getWallets().isEmpty()) {
-            Optional<Wallet> newDefaultWalletOptional = walletOwner.getWallets().stream()
-                    .max(Comparator.comparing(Wallet::getBalance));
-            newDefaultWalletOptional.ifPresent(wallet -> wallet.setDefaultStatus(true));
-            log.info("Default wallet successfully changed");
+            Optional<WalletDto> newDefaultWalletOptional = walletOwner.getWallets().stream()
+                    .max(Comparator.comparing(WalletDto::getBalance));
+            newDefaultWalletOptional.ifPresent(wallet -> wallet.setDefault(true));
+            LOG.info("Default wallet successfully changed");
         }
-        log.info("User had only one wallet and it was default");
+        LOG.info("User had only one wallet and it was default");
     }
 }
