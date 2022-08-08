@@ -1,9 +1,9 @@
 package com.sandbox.service;
 
-import com.sandbox.dto.AuthenticationRequestDto;
 import com.sandbox.dto.UserDto;
+import com.sandbox.model.UserLoginDto;
 
 public interface AuthenticationService {
-    UserDto authenticateUserAndGetToken(AuthenticationRequestDto request);
 
+    UserDto authenticateUserAndGetToken(UserLoginDto request);
 }

@@ -8,6 +8,7 @@
         <module>rest</module>
         <module>model</module>
         <module>dao-api</module>
+        <module>dao-impl</module>
         <module>service-impl</module>
         <module>service-api</module>
         <module>release-db</module>

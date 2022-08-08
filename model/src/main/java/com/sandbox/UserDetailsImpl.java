@@ -1,7 +1,7 @@
 package com.sandbox;
 
-import com.sandbox.entities.Role;
-import com.sandbox.entities.User;
+import com.sandbox.dto.RoleDto;
+import com.sandbox.dto.UserDto;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,14 +17,14 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class UserDetailsImpl implements UserDetails {
 
-    private final User user;
+    private final UserDto user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<Role> roles = user.getRoles();
+        Set<RoleDto> roles = user.getRoles();
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
-        for (Role role : roles) {
+        for (RoleDto role : roles) {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         }
 

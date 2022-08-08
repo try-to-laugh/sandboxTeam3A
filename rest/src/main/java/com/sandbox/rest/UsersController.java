@@ -1,48 +1,60 @@
 package com.sandbox.rest;
 
-import com.sandbox.dto.AuthenticationRequestDto;
+import com.sandbox.api.UsersApi;
 import com.sandbox.dto.UserDto;
 import com.sandbox.config.jwt.JwtTokenProvider;
+import com.sandbox.model.UserLoginDto;
+import com.sandbox.model.UserResponseDto;
 import com.sandbox.service.AuthenticationService;
 import com.sandbox.service.RoleService;
 import com.sandbox.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/auth")
-public class AuthenticationRestController {
+public class UsersController implements UsersApi {
 
     private final UserService userService;
     private final RoleService roleService;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationService authenticationService;
     private final PasswordEncoder passwordEncoder;
+    @Value("${jwt.header}")
+    private String authorizationHeader;
 
-    @PostMapping("/login")
-    @PermitAll
-    public ResponseEntity<String> authenticate(@RequestBody AuthenticationRequestDto request) {
-        try {
-            UserDto userDto = authenticationService.authenticateUserAndGetToken(request);
-            String token = jwtTokenProvider.createToken(request.getEmail(), userService.getUserRoles(userDto));
-            return ResponseEntity.ok().body(token);
-        } catch (AuthenticationException e) {
-            return new ResponseEntity<>("Invalid email/password combination", HttpStatus.FORBIDDEN);
-        }
+    @Override
+    public ResponseEntity<Void> deleteUserById(Long userId) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<UserResponseDto> getUserById(Long userId) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Void> login(@Valid UserLoginDto userLoginDto) {
+        UserDto userDto = authenticationService.authenticateUserAndGetToken(userLoginDto);
+        String token = jwtTokenProvider.createToken(userLoginDto.getUsername(), userService.getUserRoles(userDto));
+        return ResponseEntity.ok().header(authorizationHeader, "Bearer " + token).build();
+    }
+
+    @Override
+    public ResponseEntity<Void> logout() {
+        return null;
     }
 
     @PostMapping(path = "/registration")

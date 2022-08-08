@@ -1,6 +1,8 @@
-package com.sandbox.entities;
+package com.sandbox.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -19,7 +22,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class User implements Serializable {
 
     @Id
@@ -34,9 +39,6 @@ public class User implements Serializable {
     private String surname;
 
     @Column
-    private String email;
-
-    @Column
     private String username;
 
     @Column
@@ -49,4 +51,8 @@ public class User implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
+
+    @OneToMany
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private Set<Wallet> wallets = new HashSet<>();
 }
