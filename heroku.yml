@@ -1,0 +1,9 @@
+setup:
+  addons:
+    - plan: heroku-postgresql
+      as: DATABASE
+      config:
+        APP_NAME: budget-team-3a
+build:
+  docker:
+  web: Dockerfile
