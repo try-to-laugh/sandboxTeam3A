@@ -8,4 +8,6 @@ public interface WalletService {
 
 
     void deleteById(Long id);
+
+    WalletDto getWalletById(Long walletId);
 }

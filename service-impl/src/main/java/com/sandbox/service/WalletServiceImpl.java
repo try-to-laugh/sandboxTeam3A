@@ -40,6 +40,13 @@ public class WalletServiceImpl implements WalletService {
         LOG.info("The wallet was successfully deleted");
     }
 
+    @Override
+    public WalletDto getWalletById(Long walletId) {
+        WalletDto walletDto = walletRepository.findById(walletId)
+                .orElseThrow(() -> new WalletNotFoundException("wallet with  id = " + walletId + " not found"));
+        return walletDto;
+    }
+
     private void changeDefaultWallet(Long walletOwnerId) {
         UserDto walletOwner = userRepository.findByUserId(walletOwnerId).get();
         if (!walletOwner.getWallets().isEmpty()) {
