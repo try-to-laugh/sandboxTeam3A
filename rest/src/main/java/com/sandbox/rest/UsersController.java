@@ -12,16 +12,12 @@ import com.sandbox.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.PermitAll;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
@@ -57,7 +53,7 @@ public class UsersController implements UsersApi {
 
     @Override
     public ResponseEntity<Void> logout(String authorization) {
-        logOutCacheConfiguration.add(authorization, authorization);
+        logOutCacheConfiguration.banJwt(authorization, authorization);
         return ResponseEntity.ok().build();
     }
 

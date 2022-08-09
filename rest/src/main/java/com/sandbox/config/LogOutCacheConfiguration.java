@@ -20,11 +20,11 @@ public class LogOutCacheConfiguration {
                 }
             });
 
-    public String get(String key) {
-        return loadingCache.getIfPresent(key);
+    public boolean isJwtNotBanned(String key) {
+        return loadingCache.getIfPresent(key) == null;
     }
 
-    public void add(String key, String value) {
+    public void banJwt(String key, String value) {
         if (key != null && key.startsWith("Bearer ") && value != null) {
             loadingCache.put(key.substring(7), value);
         }
