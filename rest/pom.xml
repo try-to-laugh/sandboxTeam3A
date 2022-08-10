@@ -13,7 +13,6 @@
 
     <properties>
         <jsonwebtoken.version>0.11.5</jsonwebtoken.version>
-        <google.guava.version>31.1-jre</google.guava.version>
     </properties>
 
     <repositories>
@@ -63,7 +62,6 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>${google.guava.version}</version>
         </dependency>
 
 

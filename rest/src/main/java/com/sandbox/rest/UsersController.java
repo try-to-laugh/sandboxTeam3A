@@ -53,7 +53,7 @@ public class UsersController implements UsersApi {
 
     @Override
     public ResponseEntity<Void> logout(String authorization) {
-        logOutCacheConfiguration.banJwt(authorization, authorization);
+        logOutCacheConfiguration.banJwt(authorization);
         return ResponseEntity.ok().build();
     }
 

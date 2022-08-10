@@ -24,9 +24,9 @@ public class LogOutCacheConfiguration {
         return loadingCache.getIfPresent(key) == null;
     }
 
-    public void banJwt(String key, String value) {
-        if (key != null && key.startsWith("Bearer ") && value != null) {
-            loadingCache.put(key.substring(7), value);
+    public void banJwt(String key) {
+        if (key != null && key.startsWith("Bearer ")) {
+            loadingCache.put(key.substring(7), key.substring(7));
         }
     }
 }
