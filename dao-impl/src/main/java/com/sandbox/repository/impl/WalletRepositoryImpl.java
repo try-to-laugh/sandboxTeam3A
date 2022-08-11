@@ -25,8 +25,8 @@ public class WalletRepositoryImpl implements WalletRepository {
     }
 
     @Override
-    public Optional<WalletDto> findByStatus(Boolean walletStatus) {
-        Optional<Wallet> wallet = walletRepositoryJpa.findByDefault(walletStatus);
+    public Optional<WalletDto> findByStatus(Boolean walletStatus, Long walletOwnerId) {
+        Optional<Wallet> wallet = walletRepositoryJpa.findByDefault(walletStatus, walletOwnerId);
         return wallet.map(walletMapper::toWalletDto);
     }
 
