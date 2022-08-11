@@ -32,8 +32,10 @@ public class WalletsController implements WalletsApi {
     }
 
     @Override
-    public ResponseEntity deleteWalletById(@PathVariable Long id) {
-        walletService.deleteById(id);
+    public ResponseEntity deleteWalletById(@PathVariable Long walletId) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userName = userDetails.getUsername();
+        walletService.deleteById(walletId, userName);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
@@ -43,7 +45,7 @@ public class WalletsController implements WalletsApi {
     }
 
     @Override
-    public ResponseEntity<WalletResponseDto> getWalletById(Long walletId) {
+    public ResponseEntity<WalletResponseDto> getWalletById(@PathVariable Long walletId) {
         return null;
     }
 

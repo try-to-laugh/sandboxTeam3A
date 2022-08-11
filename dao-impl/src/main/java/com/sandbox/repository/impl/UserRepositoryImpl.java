@@ -38,4 +38,10 @@ public class UserRepositoryImpl implements UserRepository {
     public void save(UserDto userDto) {
         userRepositoryJpa.save(userMapper.toUser(userDto));
     }
+
+    @Override
+    public Optional<UserDto> findById(Long idUser) {
+        Optional<User> user = userRepositoryJpa.findById(idUser);
+        return user.map(userMapper::toUserDto);
+    }
 }

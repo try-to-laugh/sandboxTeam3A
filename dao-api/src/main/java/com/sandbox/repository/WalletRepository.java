@@ -14,4 +14,5 @@ public interface WalletRepository {
 
     void deleteById(Long id);
 
+    Optional<WalletDto> findWalletWithMaxBalance(Long userId, Long walletId);
 }

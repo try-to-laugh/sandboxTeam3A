@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
 import java.util.Optional;
 
 @Service
@@ -23,30 +22,30 @@ public class WalletServiceImpl implements WalletService {
     private final UserRepository userRepository;
 
     @Override
-    public void deleteById(Long id) {
-        WalletDto walletWhichWantToDelete = walletRepository.findById(id)
-                .orElseThrow(() ->
-                        new WalletNotFoundException("Impossible to delete this wallet. Wallet not found with id "
-                                + id));
-
-        if (walletWhichWantToDelete.isDefaultWallet()) {
-            Long walletOwnerId = walletWhichWantToDelete.getUserId();
-            walletRepository.deleteById(id);
-            changeDefaultWallet(walletOwnerId);
+    public void deleteById(Long id, String username) {
+        Optional<UserDto> userFoundedById = userRepository.findByUsername(username);
+        Long walletOwnerId = userFoundedById.get().getId();
+        WalletDto walletWhichWantToDelete = walletRepository.findById(id).orElseThrow(() ->
+                new WalletNotFoundException("Impossible to delete this wallet. Wallet not found with id " + id));
+        if (walletWhichWantToDelete.getUserId() != walletOwnerId) {
+            throw new WalletNotFoundException("Impossible to delete this wallet. Wallet not found with id " + id);
         }
-
+        if (walletWhichWantToDelete.isDefaultWallet()) {
+            Optional<UserDto> walletOwner = userRepository.findById(walletOwnerId);
+            walletOwner.ifPresent(userDto -> changeDefaultWallet(userDto, id));
+        }
         walletRepository.deleteById(id);
 
         LOG.info("The wallet was successfully deleted");
     }
 
-    private void changeDefaultWallet(Long walletOwnerId) {
-        UserDto walletOwner = userRepository.findByUserId(walletOwnerId).get();
-        if (!walletOwner.getWallets().isEmpty()) {
-            LOG.info("User had only one wallet and it was default");
-            Optional<WalletDto> newDefaultWalletOptional = walletOwner.getWallets().stream()
-                    .max(Comparator.comparing(WalletDto::getBalance));
-            newDefaultWalletOptional.ifPresent(wallet -> wallet.setDefaultWallet(true));
+    private void changeDefaultWallet(UserDto walletOwner, Long idWalletWhichDeleting) {
+        if (walletOwner.getWallets().size() > 1) {
+            Optional<WalletDto> walletWithMaxBalance = walletRepository.findWalletWithMaxBalance(walletOwner.getId(), idWalletWhichDeleting);
+            if (walletWithMaxBalance.isPresent()) {
+                walletWithMaxBalance.get().setDefaultWallet(true);
+                walletRepository.save(walletWithMaxBalance.get());
+            }
             LOG.info("Default wallet successfully changed");
         }
     }

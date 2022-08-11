@@ -14,4 +14,6 @@ public interface UserRepository {
     List<UserDto> findAll();
 
     void save(UserDto userDto);
+
+    Optional<UserDto> findById(Long idUser);
 }

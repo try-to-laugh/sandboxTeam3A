@@ -9,7 +9,13 @@ import com.sandbox.repository.WalletRepositoryJpa;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceUnit;
 import java.util.Optional;
 
 @Repository
@@ -17,6 +23,8 @@ import java.util.Optional;
 public class WalletRepositoryImpl implements WalletRepository {
     private final WalletRepositoryJpa walletRepositoryJpa;
     private final WalletMapper walletMapper;
+    @PersistenceUnit
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistenceUnitName");
 
     @Override
     public Optional<WalletDto> findById(Long id) {
@@ -44,5 +52,21 @@ public class WalletRepositoryImpl implements WalletRepository {
     @Override
     public void deleteById(Long id) {
         walletRepositoryJpa.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public Optional<WalletDto> findWalletWithMaxBalance(Long userId, Long walletIdIgnore) {
+        EntityManager entityManager = emf.createEntityManager();
+        entityManager.getTransaction().begin();
+        Wallet walletWithMaxBalance = (Wallet) entityManager
+                .createQuery("SELECT wallet FROM Wallet wallet WHERE wallet.userId = ?1 AND wallet.id <> ?2 AND " +
+                        "wallet.balance = (SELECT MAX(balance) FROM Wallet WHERE userId = ?1 AND id <> ?2)")
+                .setParameter(1, userId)
+                .setParameter(2, walletIdIgnore)
+                .getSingleResult();
+        entityManager.getTransaction().commit();
+        WalletDto walletDto = walletMapper.toWalletDto(walletWithMaxBalance);
+        return Optional.of(walletDto);
     }
 }
