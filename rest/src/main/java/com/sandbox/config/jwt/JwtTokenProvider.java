@@ -27,6 +27,10 @@ public class JwtTokenProvider {
 
     private final UserDetailsService userDetailsService;
 
+    private static final String JWT_USER_ID = "userId";
+    private static final String JWT_USERNAME = "username";
+    private static final String JWT_ROLES = "roles";
+
     @Value("${jwt.secret}")
     private String secretKey;
     @Value("${jwt.header}")
@@ -39,9 +43,11 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String username, Set<RoleDto> roles) {
-        Claims claims = Jwts.claims().setSubject(username);
-        claims.put("roles", roles);
+    public String createToken(String username, Long userId, Set<RoleDto> roles) {
+        Claims claims = Jwts.claims();
+        claims.put(JWT_USER_ID, userId.toString());
+        claims.put(JWT_USERNAME, username);
+        claims.put(JWT_ROLES, roles);
         Date validity = Date.from(LocalDateTime.now().plusMinutes(validityInMinutes)
                 .atZone(ZoneId.systemDefault()).toInstant());
 
@@ -62,11 +68,15 @@ public class JwtTokenProvider {
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 
-    public String getUsername(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+    public String getUserId(String token) {
+        return String.valueOf(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get(JWT_USER_ID));
     }
 
-    public String resolveToken(HttpServletRequest request) {
+    public String getUsername(String token) {
+        return String.valueOf(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get(JWT_USERNAME));
+    }
+
+    public String resolveTokenFromRequest(HttpServletRequest request) {
         String bearer = request.getHeader(authorizationHeader);
         if (bearer != null && bearer.startsWith("Bearer ")) {
             return bearer.substring(7);
@@ -74,4 +84,10 @@ public class JwtTokenProvider {
         return null;
     }
 
+    public String resolveToken(String token) {
+        if (token != null && token.startsWith("Bearer ")) {
+            return token.substring(7);
+        }
+        return null;
+    }
 }

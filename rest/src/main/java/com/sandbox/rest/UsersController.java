@@ -47,7 +47,7 @@ public class UsersController implements UsersApi {
     @Override
     public ResponseEntity<Void> login(@Valid UserLoginDto userLoginDto) {
         UserDto userDto = authenticationService.authenticateUserAndGetToken(userLoginDto);
-        String token = jwtTokenProvider.createToken(userLoginDto.getUsername(), userService.getUserRoles(userDto));
+        String token = jwtTokenProvider.createToken(userDto.getUsername(), userDto.getId(), userService.getUserRoles(userDto));
         return ResponseEntity.ok().header(authorizationHeader, "Bearer " + token).build();
     }
 
