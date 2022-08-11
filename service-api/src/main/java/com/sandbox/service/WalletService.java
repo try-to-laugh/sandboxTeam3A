@@ -1,10 +1,14 @@
 package com.sandbox.service;
 
-import com.sandbox.model.WalletRequestDto;
+import com.sandbox.dto.WalletDto;
 
 public interface WalletService {
 
-    Long createWallet(WalletRequestDto walletRequestDto);
+    WalletDto updateWalletById(Long id, WalletDto requestWallet, String userName);
+
+
+    void deleteById(Long id, String username);
+    Long createWallet(WalletDto walletDto);
 
     void deleteById(Long id);
 }

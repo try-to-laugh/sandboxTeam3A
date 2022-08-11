@@ -1,11 +1,15 @@
 package com.sandbox.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
+@AllArgsConstructor
+@Builder
 public class UserDto {
     private Long id;
     private String name;
