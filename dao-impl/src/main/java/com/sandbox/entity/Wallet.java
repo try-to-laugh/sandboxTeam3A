@@ -1,22 +1,21 @@
 package com.sandbox.entity;
 
+
+import com.sandbox.enums.Currency;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Table;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.JoinColumn;
-import javax.persistence.Enumerated;
-import javax.persistence.EnumType;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -24,6 +23,7 @@ import java.math.BigDecimal;
 @Table(name = "wallets")
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class Wallet implements Serializable {
@@ -39,14 +39,13 @@ public class Wallet implements Serializable {
     @Column
     private BigDecimal balance;
 
-    @Column
-    private boolean isDefault;
+    @Column(name = "is_default")
+    private boolean defaultWallet;
 
-    @Column
-    @Enumerated(value = EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private Currency currency;
 
-    @ManyToOne(optional = false, cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
+
 }

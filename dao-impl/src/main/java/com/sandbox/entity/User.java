@@ -1,8 +1,10 @@
 package com.sandbox.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,14 +19,19 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
 
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
-@RequiredArgsConstructor
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class User implements Serializable {
 
     @Id
@@ -52,7 +59,9 @@ public class User implements Serializable {
     )
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private Set<Wallet> wallets = new HashSet<>();
+    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @Column(nullable = false)
+    @ToString.Exclude
+    private List<Wallet> wallets = new ArrayList<>();
+
 }
