@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface UserRepository {
 
+    Optional<UserDto> findByUserId(Long userId);
+
     Optional<UserDto> findByUsername(String username);
 
     List<UserDto> findAll();

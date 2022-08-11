@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <changeSet id="2022_08_04_create_wallets_table" author="Aleksei Gustyr">
+        <createTable tableName="wallets">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="balance" type="money"/>
+            <column name="is_default" type="boolean"/>
+            <column name="currency" type="varchar(255)"/>
+            <column name="user_id" type="bigint"/>
+        </createTable>
+        <addUniqueConstraint tableName="wallets" columnNames="name,currency"/>
+        <addForeignKeyConstraint baseTableName="wallets" baseColumnNames="user_id" constraintName="user_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+        <rollback>
+            <dropTable tableName="wallets"/>
+        </rollback>
+    </changeSet>
+
+
+</databaseChangeLog>

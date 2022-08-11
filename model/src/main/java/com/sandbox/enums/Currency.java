@@ -1,13 +1,15 @@
-package com.sandbox.dto;
+package com.sandbox.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum CurrencyDto {
+public enum Currency {
     USD("USD"),
-    EURO("EURO");
+    EUR("EUR"),
+    UAH("UAH"),
+    PLZ("PLZ");
 
     private final String currency;
 }
