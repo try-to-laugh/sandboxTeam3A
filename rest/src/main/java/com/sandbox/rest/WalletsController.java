@@ -10,6 +10,8 @@ import com.sandbox.service.WalletService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,8 +50,10 @@ public class WalletsController implements WalletsApi {
 
     @Override
     public ResponseEntity<WalletResponseDto> updateWalletById(Long walletId, @Valid WalletRequestDto walletRequestDto) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userName = userDetails.getUsername();
         WalletDto changeWallet = walletMapperRest.fromWalletRequestDtoToWalletDto(walletRequestDto);
-        WalletDto responseWallet = walletService.updateWalletById(walletId, changeWallet);
+        WalletDto responseWallet = walletService.updateWalletById(walletId, changeWallet, userName);
         return new ResponseEntity<>(walletMapperRest.fromWalletDtoToWalletResponseDto(responseWallet), HttpStatus.OK);
     }
 }

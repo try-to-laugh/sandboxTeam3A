@@ -40,6 +40,8 @@ public class WalletServiceImpl implements WalletService {
         LOG.info("The wallet was successfully deleted");
     }
 
+    private void changeDefaultWallet(Long walletOwnerId) {
+        UserDto walletOwner = userRepository.findByUserId(walletOwnerId).get();
     @Override
     public WalletDto getWalletById(Long walletId) {
         WalletDto walletDto = walletRepository.findById(walletId)
@@ -58,12 +60,15 @@ public class WalletServiceImpl implements WalletService {
         }
     }
 
-    public WalletDto updateWalletById(Long walletId, WalletDto requestWallet) {
-
+    public WalletDto updateWalletById(Long walletId, WalletDto requestWallet, String userName) {
+        Long walletOwnerId = userRepository.findByUsername(userName).get().getId();
         WalletDto updatedWallet = walletRepository.findById(walletId)
-                .orElseThrow(() -> new WalletNotFoundException("wallet with  id = " + walletId + " not found'"));
+                .orElseThrow(() -> new WalletNotFoundException("Wallet with  id = " + walletId + " not found'"));
+        if (updatedWallet.getUserId() != walletOwnerId) {
+            throw new WalletNotFoundException("Wallet with  id = " + walletId + " not found");
+        }
         Optional<WalletDto> defaultStatusWalletCheck =
-                walletRepository.findByStatus(requestWallet.isDefaultWallet());
+                walletRepository.findByStatus(requestWallet.isDefaultWallet(), walletOwnerId);
         if (defaultStatusWalletCheck.isPresent()) {
             WalletDto makeFalseWallet = defaultStatusWalletCheck.get();
             makeFalseWallet.setDefaultWallet(false);

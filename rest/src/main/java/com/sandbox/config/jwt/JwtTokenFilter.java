@@ -1,5 +1,6 @@
 package com.sandbox.config.jwt;
 
+import com.sandbox.config.LogOutCacheConfiguration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,11 +19,12 @@ import java.io.IOException;
 public class JwtTokenFilter extends GenericFilterBean {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final LogOutCacheConfiguration logOutCacheConfiguration;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        String token = jwtTokenProvider.resolveToken((HttpServletRequest) servletRequest);
-        if (token != null && jwtTokenProvider.validateToken(token)) {
+        String token = jwtTokenProvider.resolveTokenFromRequest((HttpServletRequest) servletRequest);
+        if (token != null && jwtTokenProvider.validateToken(token) && logOutCacheConfiguration.isJwtNotBanned(token)) {
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
             if (authentication != null) {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
