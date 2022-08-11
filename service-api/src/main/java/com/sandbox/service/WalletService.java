@@ -6,8 +6,7 @@ public interface WalletService {
 
     WalletDto updateWalletById(Long id, WalletDto requestWallet, String userName);
 
-
-    void deleteById(Long id);
-
     WalletDto getWalletById(Long walletId);
+
+    void deleteById(Long id, String username);
 }
