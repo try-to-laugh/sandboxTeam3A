@@ -45,7 +45,7 @@ public class WalletsController implements WalletsApi {
     }
 
     @Override
-    public ResponseEntity<WalletResponseDto> getWalletById(Long walletId) {
+    public ResponseEntity<WalletResponseDto> getWalletById(@PathVariable Long walletId) {
         WalletDto walletDto = walletService.getWalletById(walletId);
         return new ResponseEntity<>(walletMapperRest.fromWalletDtoToWalletResponseDto(walletDto), HttpStatus.OK);
     }

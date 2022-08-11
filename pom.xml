@@ -36,6 +36,8 @@
         <rest-api.version>0.0.1-SNAPSHOT</rest-api.version>
         <mapstruct.version>1.5.2.Final</mapstruct.version>
         <google.guava.version>31.1-jre</google.guava.version>
+        <hibernate-core>5.4.0.Final</hibernate-core>
+        <hibernate-entitymanager>5.4.10.Final</hibernate-entitymanager>
     </properties>
 
     <dependencyManagement>
@@ -141,6 +143,16 @@
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
                 <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>${hibernate-core}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-entitymanager</artifactId>
+                <version>${hibernate-entitymanager}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
