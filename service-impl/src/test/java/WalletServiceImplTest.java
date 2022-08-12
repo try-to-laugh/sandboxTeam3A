@@ -40,6 +40,24 @@ class WalletServiceImplTest {
     @Captor
     ArgumentCaptor<WalletDto> argCaptor;
 
+    private final WalletDto walletToChange = WalletDto.builder()
+            .id(1L)
+            .name("wallet1")
+            .balance(new BigDecimal(2000))
+            .defaultWallet(false)
+            .currency(Currency.EUR)
+            .userId(1L)
+            .build();
+    private final UserDto walletOwner = UserDto.builder()
+            .id(1L)
+            .name("Aleks")
+            .surname("Palos")
+            .username("Petir")
+            .password("qwerty123")
+            .roles(new HashSet<>())
+            .wallets(new HashSet<>())
+            .build();
+
     @Test
     void deleteById() {
         Set<RoleDto> roles = new HashSet<>();
@@ -98,15 +116,7 @@ class WalletServiceImplTest {
     }
 
     @Test
-    public void walletUpdatedSuccesfullyTest() {
-        WalletDto walletToChange = WalletDto.builder()
-                .id(1L)
-                .name("wallet1")
-                .balance(new BigDecimal(2000))
-                .defaultWallet(false)
-                .currency(Currency.EUR)
-                .userId(1L)
-                .build();
+    void walletUpdatedSuccessfullyTest() {
         WalletDto updateWallet = WalletDto.builder()
                 .id(1L)
                 .name("wallet2")
@@ -114,15 +124,6 @@ class WalletServiceImplTest {
                 .defaultWallet(true)
                 .currency(Currency.PLZ)
                 .userId(1L)
-                .build();
-        UserDto walletOwner = UserDto.builder()
-                .id(1L)
-                .name("Aleks")
-                .surname("Palos")
-                .username("Petir")
-                .password("qwerty123")
-                .roles(new HashSet<>())
-                .wallets(new HashSet<>())
                 .build();
         Mockito.when(mockWalletRepository.findById(1L)).thenReturn(Optional.of(walletToChange));
         Mockito.when(mockUserRepository.findByUsername("Petir")).thenReturn(Optional.of(walletOwner));
@@ -133,15 +134,7 @@ class WalletServiceImplTest {
     }
 
     @Test
-    public void WalletStatusChangedToNonDefault() {
-        WalletDto walletToChange = WalletDto.builder()
-                .id(1L)
-                .name("wallet1")
-                .balance(new BigDecimal(2000))
-                .defaultWallet(false)
-                .currency(Currency.EUR)
-                .userId(1L)
-                .build();
+    void WalletStatusChangedToNonDefault() {
         WalletDto controlWallet = WalletDto.builder()
                 .id(2L)
                 .name("wallet2")
@@ -158,15 +151,6 @@ class WalletServiceImplTest {
                 .currency(Currency.USD)
                 .userId(1L)
                 .build();
-        UserDto walletOwner = UserDto.builder()
-                .id(1L)
-                .name("Aleks")
-                .surname("Palos")
-                .username("Petir")
-                .password("qwerty123")
-                .roles(new HashSet<>())
-                .wallets(new HashSet<>())
-                .build();
         Mockito.when(mockWalletRepository.findByStatus(updateWallet.isDefaultWallet(), walletOwner.getId()))
                 .thenReturn(Optional.of(controlWallet));
         Mockito.when(mockWalletRepository.findById(1L))
@@ -179,15 +163,7 @@ class WalletServiceImplTest {
     }
 
     @Test
-    public void notWalletOwner() {
-        WalletDto walletToChange = WalletDto.builder()
-                .id(1L)
-                .name("wallet1")
-                .balance(new BigDecimal(2000))
-                .defaultWallet(false)
-                .currency(Currency.EUR)
-                .userId(1L)
-                .build();
+    void notWalletOwner() {
         WalletDto updateWallet = WalletDto.builder()
                 .id(1L)
                 .name("wallet2")
@@ -195,15 +171,6 @@ class WalletServiceImplTest {
                 .defaultWallet(true)
                 .currency(Currency.USD)
                 .userId(1L)
-                .build();
-        UserDto walletOwner = UserDto.builder()
-                .id(1L)
-                .name("Aleks")
-                .surname("Palos")
-                .username("Petir")
-                .password("qwerty123")
-                .roles(new HashSet<>())
-                .wallets(new HashSet<>())
                 .build();
         UserDto notWalletOwner = UserDto.builder()
                 .id(2L)
@@ -221,5 +188,19 @@ class WalletServiceImplTest {
                 .isInstanceOf(WalletNotFoundException.class)
                 .hasMessage("Wallet with  id = " + walletToChange.getId() + " not found");
 
+    }
+
+    @Test
+    void getWalletByIdTest() {
+        Mockito.when(mockWalletRepository.findById(1L)).thenReturn(Optional.of(walletToChange));
+        WalletDto actualWallet = walletService.getWalletById(1L);
+        assertEquals(walletToChange, actualWallet);
+    }
+
+    @Test
+    void walletNotFoundGetByIdTest() {
+        assertThatThrownBy(() -> walletService.getWalletById(20L))
+                .isInstanceOf(WalletNotFoundException.class)
+                .hasMessage("This wallet not found");
     }
 }

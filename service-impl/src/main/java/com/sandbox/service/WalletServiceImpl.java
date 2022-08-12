@@ -27,7 +27,7 @@ public class WalletServiceImpl implements WalletService {
         Long walletOwnerId = userFoundedById.get().getId();
         WalletDto walletWhichWantToDelete = walletRepository.findById(id).orElseThrow(() ->
                 new WalletNotFoundException("Impossible to delete this wallet. Wallet not found with id " + id));
-        if (walletWhichWantToDelete.getUserId() != walletOwnerId) {
+        if (!walletWhichWantToDelete.getUserId().equals(walletOwnerId)) {
             throw new WalletNotFoundException("Impossible to delete this wallet. Wallet not found with id " + id);
         }
         if (walletWhichWantToDelete.isDefaultWallet()) {
@@ -54,7 +54,7 @@ public class WalletServiceImpl implements WalletService {
         Long walletOwnerId = userRepository.findByUsername(userName).get().getId();
         WalletDto updatedWallet = walletRepository.findById(walletId)
                 .orElseThrow(() -> new WalletNotFoundException("Wallet with  id = " + walletId + " not found'"));
-        if (updatedWallet.getUserId() != walletOwnerId) {
+        if (!updatedWallet.getUserId().equals(walletOwnerId)) {
             throw new WalletNotFoundException("Wallet with  id = " + walletId + " not found");
         }
         Optional<WalletDto> defaultStatusWalletCheck =
@@ -74,4 +74,8 @@ public class WalletServiceImpl implements WalletService {
         return updatedWallet;
     }
 
+    public WalletDto getWalletById(Long walletId) {
+        return walletRepository.findById(walletId)
+                .orElseThrow(() -> new WalletNotFoundException("This wallet not found"));
+    }
 }
