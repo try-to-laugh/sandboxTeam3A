@@ -28,7 +28,10 @@ public class WalletsController implements WalletsApi {
 
     @Override
     public ResponseEntity<Long> createWallet(@Valid WalletRequestDto walletRequestDto) {
-        return null;
+        UserDetails userDetails =(UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = userDetails.getUsername();
+        WalletDto walletDto = walletMapperRest.fromWalletRequestDtoToWalletDto(walletRequestDto);
+        return new ResponseEntity<Long>(walletService.createWallet(walletDto, username), HttpStatus.CREATED);
     }
 
     @Override

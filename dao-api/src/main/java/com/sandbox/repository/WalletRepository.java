@@ -10,7 +10,7 @@ public interface WalletRepository {
 
     Optional<WalletDto> findByStatus(Boolean walletStatus, Long walletOwnerId);
 
-    void save(WalletDto walletDto);
+    Long save(WalletDto walletDto);
 
     void deleteById(Long id);
 
