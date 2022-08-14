@@ -6,12 +6,12 @@ import com.sandbox.model.WalletResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
-public interface WalletMapperRest {
+    @Mapper(componentModel = "spring")
+    public interface WalletMapperRest {
 
-    @Mapping(source = "defaultWallet", target = "default")
-    WalletResponseDto fromWalletDtoToWalletResponseDto(WalletDto walletDto);
+        @Mapping(source = "defaultWallet", target = "default")
+        WalletResponseDto fromWalletDtoToWalletResponseDto(WalletDto walletDto);
 
-    @Mapping(source = "default", target = "defaultWallet")
-    WalletDto fromWalletRequestDtoToWalletDto(WalletRequestDto walletRequestDto);
-}
+        @Mapping(source = "default", target = "defaultWallet")
+        WalletDto fromWalletRequestDtoToWalletDto(WalletRequestDto walletRequestDto);
+    }

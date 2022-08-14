@@ -1,11 +1,10 @@
 package com.sandbox.entity;
 
-import com.sandbox.enums.Currency;
+import com.sandbox.enums.TypeName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,35 +15,20 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 @Entity
-@Table(name = "wallets")
+@Table(name = "types")
 @Getter
 @Setter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class Wallet implements Serializable {
+public class Type implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column
-    private String name;
-
-    @Column
-    private BigDecimal balance;
-
-    @Column(name = "is_default")
-    private boolean defaultWallet;
-
     @Enumerated(EnumType.STRING)
-    private Currency currency;
-
-    @Column(name = "user_id")
-    private Long userId;
-
+    private TypeName name;
 }

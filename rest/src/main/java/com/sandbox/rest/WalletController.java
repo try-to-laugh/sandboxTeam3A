@@ -1,5 +1,6 @@
 package com.sandbox.rest;
 
+import com.sandbox.UserDetailsImpl;
 import com.sandbox.api.WalletsApi;
 import com.sandbox.dto.WalletDto;
 import com.sandbox.mapper.WalletMapperRest;
@@ -13,8 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,10 +28,12 @@ public class WalletController implements WalletsApi {
     private final WalletService walletService;
     private final WalletMapperRest walletMapperRest;
 
-    @PostMapping
+    @Override
     public ResponseEntity<Long> createWallet(@Valid WalletRequestDto walletRequestDto) {
-        return new ResponseEntity<Long>(walletService.createWallet(walletRequestDto),
-                HttpStatus.CREATED);
+        UserDetailsImpl userDetails =(UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = userDetails.getUsername();
+        WalletDto walletDto = walletMapperRest.fromWalletRequestDtoToWalletDto(walletRequestDto);
+        return new ResponseEntity<Long>(walletService.createWallet(walletDto, username), HttpStatus.CREATED);
     }
 
     @Override
@@ -50,7 +51,8 @@ public class WalletController implements WalletsApi {
 
     @Override
     public ResponseEntity<WalletResponseDto> getWalletById(@PathVariable Long walletId) {
-        return null;
+        WalletDto walletDto = walletService.getWalletById(walletId);
+        return new ResponseEntity<>(walletMapperRest.fromWalletDtoToWalletResponseDto(walletDto), HttpStatus.OK);
     }
 
     @Override

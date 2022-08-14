@@ -2,6 +2,7 @@ import com.sandbox.dto.UserDto;
 import com.sandbox.dto.WalletDto;
 import com.sandbox.dto.RoleDto;
 import com.sandbox.enums.Currency;
+import com.sandbox.exception.BudgetRuntimeException;
 import com.sandbox.exception.WalletNotFoundException;
 import com.sandbox.repository.UserRepository;
 import com.sandbox.repository.WalletRepository;
@@ -17,11 +18,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.util.Set;
-import  java.util.HashSet;
+import java.util.HashSet;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.verify;
@@ -175,7 +178,6 @@ class WalletServiceImplTest {
         WalletDto changedWallet = walletService.updateWalletById(1L, updateWallet, "Petir");
         assertFalse(controlWallet.isDefaultWallet());
         assertEquals(changedWallet.isDefaultWallet(), updateWallet.isDefaultWallet());
-
     }
 
     @Test
@@ -220,6 +222,95 @@ class WalletServiceImplTest {
         assertThatThrownBy(() -> walletService.updateWalletById(1L, updateWallet, "Artist"))
                 .isInstanceOf(WalletNotFoundException.class)
                 .hasMessage("Wallet with  id = " + walletToChange.getId() + " not found");
+    }
 
+
+    @Test
+    public void createNonDefaulWalletForUserWithoutWalletsTest() {
+        UserDto user = UserDto.builder()
+                .id(1L)
+                .name("Harry")
+                .surname("Potter")
+                .username("username")
+                .password("password")
+                .roles(new HashSet<>())
+                .wallets(new HashSet<>())
+                .build();
+        WalletDto walletToAdd = WalletDto.builder()
+                .name("super")
+                .balance(new BigDecimal(1300))
+                .defaultWallet(false)
+                .currency(Currency.USD)
+                .userId(1L)
+                .build();
+        Mockito.when(mockUserRepository.findByUsername(any())).thenReturn(Optional.of(user));
+        Mockito.when(mockWalletRepository.save(any())).thenReturn(1L);
+        walletService.createWallet(walletToAdd, user.getUsername());
+        assertTrue(walletToAdd.isDefaultWallet());
+    }
+
+    @Test
+    public void createDefaulWalletForUserWithAlreadyExistedDefaultWalletTest() {
+        UserDto user = UserDto.builder()
+                .id(1L)
+                .name("Harry")
+                .surname("Potter")
+                .username("username")
+                .password("password")
+                .roles(new HashSet<>())
+                .wallets(new HashSet<>())
+                .build();
+        WalletDto walletExisted = WalletDto.builder()
+                .name("wallet1")
+                .balance(new BigDecimal(1300))
+                .defaultWallet(true)
+                .currency(Currency.USD)
+                .userId(1L)
+                .build();
+        WalletDto walletToAdd = WalletDto.builder()
+                .name("super")
+                .balance(new BigDecimal(0))
+                .defaultWallet(true)
+                .currency(Currency.USD)
+                .userId(1L)
+                .build();
+        user.getWallets().add(walletExisted);
+        Mockito.when(mockUserRepository.findByUsername(any())).thenReturn(Optional.of(user));
+        Mockito.when(mockWalletRepository.save(any())).thenReturn(1L);
+        walletService.createWallet(walletToAdd, user.getUsername());
+        assertTrue(walletToAdd.isDefaultWallet());
+        assertFalse(walletExisted.isDefaultWallet());
+    }
+
+    @Test
+    public void createWalletTheSameWalletAlreadyExistTest() {
+        UserDto user = UserDto.builder()
+                .id(1L)
+                .name("Harry")
+                .surname("Potter")
+                .username("username")
+                .password("password")
+                .roles(new HashSet<>())
+                .wallets(new HashSet<>())
+                .build();
+        WalletDto walletExisted = WalletDto.builder()
+                .name("wallet1")
+                .balance(new BigDecimal(0))
+                .defaultWallet(true)
+                .currency(Currency.USD)
+                .userId(1L)
+                .build();
+        WalletDto walletToAdd = WalletDto.builder()
+                .name("wallet1")
+                .balance(new BigDecimal(0))
+                .defaultWallet(true)
+                .currency(Currency.USD)
+                .userId(1L)
+                .build();
+        user.getWallets().add(walletExisted);
+        Mockito.when(mockUserRepository.findByUsername(any())).thenReturn(Optional.of(user));
+        Mockito.when(mockWalletRepository.save(any())).thenReturn(1L);
+        assertThatThrownBy(() -> walletService.createWallet(walletToAdd, user.getUsername())).isInstanceOf(
+                BudgetRuntimeException.class).hasMessage("Such wallet already exists, please choose another currency or change the name of wallet");
     }
 }

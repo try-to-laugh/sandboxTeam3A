@@ -24,7 +24,9 @@ public class WalletRepositoryImpl implements WalletRepository {
     private final WalletRepositoryJpa walletRepositoryJpa;
     private final WalletMapper walletMapper;
     @PersistenceUnit
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistenceUnitName");
+    private EntityManagerFactory emf =
+            Persistence.createEntityManagerFactory(
+                    "persistenceUnitName");
 
     @Override
     public Optional<WalletDto> findById(Long id) {
@@ -33,19 +35,22 @@ public class WalletRepositoryImpl implements WalletRepository {
     }
 
     @Override
-    public Optional<WalletDto> findByStatus(Boolean walletStatus, Long walletOwnerId) {
-        Optional<Wallet> wallet = walletRepositoryJpa.findByDefault(walletStatus, walletOwnerId);
+    public Optional<WalletDto> findByStatus(Boolean walletStatus,
+                                            Long walletOwnerId) {
+        Optional<Wallet> wallet =
+                walletRepositoryJpa.findByDefault(walletStatus,
+                        walletOwnerId);
         return wallet.map(walletMapper::toWalletDto);
     }
 
     @Override
-    public void save(WalletDto walletDto) {
+    public Long save(WalletDto walletDto) {
         try {
             Wallet savedWallet = walletMapper.toWallet(walletDto);
-            walletRepositoryJpa.saveAndFlush(savedWallet);
+            return walletRepositoryJpa.saveAndFlush(savedWallet).getId();
         } catch (DataIntegrityViolationException ex) {
             throw new BudgetRuntimeException("A wallet with such a name and currency already exists. "
-                    + "Please, change the name", ex);
+                            + "Please, change the name", ex);
         }
     }
 
@@ -56,17 +61,20 @@ public class WalletRepositoryImpl implements WalletRepository {
 
     @Override
     @Transactional
-    public Optional<WalletDto> findWalletWithMaxBalance(Long userId, Long walletIdIgnore) {
+    public Optional<WalletDto> findWalletWithMaxBalance(Long userId,
+                                                        Long walletIdIgnore) {
         EntityManager entityManager = emf.createEntityManager();
         entityManager.getTransaction().begin();
         Wallet walletWithMaxBalance = (Wallet) entityManager
-                .createQuery("SELECT wallet FROM Wallet wallet WHERE wallet.userId = ?1 AND wallet.id <> ?2 AND " +
-                        "wallet.balance = (SELECT MAX(balance) FROM Wallet WHERE userId = ?1 AND id <> ?2)")
+                .createQuery(
+                        "SELECT wallet FROM Wallet wallet WHERE wallet.userId = ?1 AND wallet.id <> ?2 AND " +
+                                "wallet.balance = (SELECT MAX(balance) FROM Wallet WHERE userId = ?1 AND id <> ?2)")
                 .setParameter(1, userId)
                 .setParameter(2, walletIdIgnore)
                 .getSingleResult();
         entityManager.getTransaction().commit();
-        WalletDto walletDto = walletMapper.toWalletDto(walletWithMaxBalance);
+        WalletDto walletDto =
+                walletMapper.toWalletDto(walletWithMaxBalance);
         return Optional.of(walletDto);
     }
 }
