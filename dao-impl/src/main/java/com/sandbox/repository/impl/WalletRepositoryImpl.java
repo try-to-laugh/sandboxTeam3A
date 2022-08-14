@@ -39,10 +39,10 @@ public class WalletRepositoryImpl implements WalletRepository {
     }
 
     @Override
-    public void save(WalletDto walletDto) {
+    public Long save(WalletDto walletDto) {
         try {
             Wallet savedWallet = walletMapper.toWallet(walletDto);
-            walletRepositoryJpa.saveAndFlush(savedWallet);
+            return walletRepositoryJpa.saveAndFlush(savedWallet).getId();
         } catch (DataIntegrityViolationException ex) {
             throw new BudgetRuntimeException("A wallet with such a name and currency already exists. "
                     + "Please, change the name", ex);

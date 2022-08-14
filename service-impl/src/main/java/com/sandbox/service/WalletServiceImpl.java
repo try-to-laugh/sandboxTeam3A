@@ -2,6 +2,7 @@ package com.sandbox.service;
 
 import com.sandbox.dto.UserDto;
 import com.sandbox.dto.WalletDto;
+import com.sandbox.exception.BudgetRuntimeException;
 import com.sandbox.exception.WalletNotFoundException;
 import com.sandbox.repository.UserRepository;
 import com.sandbox.repository.WalletRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +22,24 @@ public class WalletServiceImpl implements WalletService {
     private static final Logger LOG = LoggerFactory.getLogger(WalletServiceImpl.class);
     private final WalletRepository walletRepository;
     private final UserRepository userRepository;
+
+    @Override
+    public Long createWallet (WalletDto walletDto, String username) {
+        UserDto user = userRepository.findByUsername(username).get();
+        Set<WalletDto> userWallets = user.getWallets();
+        if (userWallets.isEmpty()) {
+            walletDto.setDefaultWallet(true);
+        } else if (walletDto.isDefaultWallet()) {
+            WalletDto walletDefault = userWallets.stream().filter(WalletDto::isDefaultWallet).findFirst().get();
+            walletDefault.setDefaultWallet(false);
+            walletRepository.save(walletDefault);
+        }
+        if(userWallets.contains(walletDto)) {
+            throw new BudgetRuntimeException("Such wallet already exists, please choose another currency or change the name of wallet");
+        }
+        walletDto.setUserId(user.getId());
+        return walletRepository.save(walletDto);
+    }
 
     @Override
     public void deleteById(Long id, String username) {

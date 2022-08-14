@@ -9,4 +9,6 @@ public interface WalletService {
     WalletDto getWalletById(Long walletId);
 
     void deleteById(Long id, String username);
+
+    Long createWallet(WalletDto walletDto, String username);
 }
