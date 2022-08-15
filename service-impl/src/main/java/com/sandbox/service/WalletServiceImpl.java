@@ -26,6 +26,7 @@ public class WalletServiceImpl implements WalletService {
     @Override
     public Long createWallet (WalletDto walletDto, String username) {
         UserDto user = userRepository.findByUsername(username).get();
+        walletDto.setUserId(user.getId());
         Set<WalletDto> userWallets = user.getWallets();
         if (userWallets.isEmpty()) {
             walletDto.setDefaultWallet(true);
@@ -37,7 +38,6 @@ public class WalletServiceImpl implements WalletService {
         if(userWallets.contains(walletDto)) {
             throw new BudgetRuntimeException("Such wallet already exists, please choose another currency or change the name of wallet");
         }
-        walletDto.setUserId(user.getId());
         return walletRepository.save(walletDto);
     }
 
