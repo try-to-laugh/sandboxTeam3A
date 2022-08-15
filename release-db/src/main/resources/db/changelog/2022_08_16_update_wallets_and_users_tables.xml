@@ -1,0 +1,38 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="2022_08_16_update_wallets_and_users_tables" author="Aleksei Gustyr">
+        <dropUniqueConstraint tableName="wallets" uniqueColumns="name,currency" constraintName="wallets_name_currency_key"/>
+        <addUniqueConstraint tableName="wallets" columnNames="name,currency,user_id" constraintName="uniqWallet"/>
+        <addUniqueConstraint tableName="users" columnNames="username"/>
+        <addUniqueConstraint tableName="roles" columnNames="name"/>
+        <addNotNullConstraint tableName="wallets" columnName="name"/>
+        <addNotNullConstraint tableName="wallets" columnName="balance"/>
+        <addNotNullConstraint tableName="wallets" columnName="currency"/>
+        <addNotNullConstraint tableName="wallets" columnName="is_default"/>
+        <addNotNullConstraint tableName="wallets" columnName="user_id"/>
+        <addNotNullConstraint tableName="users" columnName="username"/>
+        <addNotNullConstraint tableName="users" columnName="password"/>
+        <addNotNullConstraint tableName="roles" columnName="name"/>
+        <addDefaultValue tableName="wallets" columnName="balance" defaultValue="0"/>
+        <addDefaultValue tableName="wallets" columnName="is_default" defaultValueBoolean="false"/>
+    <rollback>
+        <addUniqueConstraint tableName="wallets" columnNames="name,currency"/>
+        <dropUniqueConstraint tableName="wallets" constraintName="uniqWallet"/>
+        <dropUniqueConstraint tableName="users" uniqueColumns="username"/>
+        <dropUniqueConstraint tableName="roles" uniqueColumns="name"/>
+        <dropNotNullConstraint tableName="wallets" columnName="name"/>
+        <dropNotNullConstraint tableName="wallets" columnName="balance"/>
+        <dropNotNullConstraint tableName="wallets" columnName="currency"/>
+        <dropNotNullConstraint tableName="wallets" columnName="is_default"/>
+        <dropNotNullConstraint tableName="wallets" columnName="user_id"/>
+        <dropNotNullConstraint tableName="users" columnName="username"/>
+        <dropNotNullConstraint tableName="users" columnName="password"/>
+        <dropNotNullConstraint tableName="roles" columnName="name"/>
+        <dropDefaultValue tableName="wallets" columnName="balance"/>
+        <dropDefaultValue tableName="wallets" columnName="is_default"/>
+    </rollback>
+    </changeSet>
+</databaseChangeLog>
