@@ -26,4 +26,10 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         Optional<Transaction> transaction = transactionRepositoryJpa.findById(id);
         return transaction.map(transactionMapper::toTransactionDto);
     }
+
+    @Override
+    public Long save(TransactionDto TransactionDto) {
+        Transaction transaction = transactionMapper.toTransaction(TransactionDto);
+        return transactionRepositoryJpa.saveAndFlush(transaction).getId();
+    }
 }

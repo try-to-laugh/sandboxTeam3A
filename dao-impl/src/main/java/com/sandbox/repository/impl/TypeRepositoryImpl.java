@@ -17,6 +17,12 @@ public class TypeRepositoryImpl implements TypeRepository {
     private final TypeMapper typeMapper;
 
     @Override
+    public Optional<TypeDto> findByName(String name) {
+        Optional<Type> type = typeRepositoryJpa.findByName(name);
+        return type.map(typeMapper::toTypeDto);
+    }
+
+    @Override
     public Optional<TypeDto> findNameById(Long id) {
         Optional<Type> transactionType = typeRepositoryJpa.findById(id);
         return transactionType.map(typeMapper::toTypeDto);

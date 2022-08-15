@@ -43,6 +43,19 @@ public class TransactionServiceImpl implements TransactionService {
         LOG.info("Transaction deleted");
     }
 
+    @Override
+    public Long createTransaction(TransactionDto transactionDto, String username) {
+        UserDto user = userService.findUserByUsername(username);
+        Optional<WalletDto> walletOptional = user.getWallets().stream()
+                .filter(walletDto -> walletDto.getId().equals(transactionDto.getWalletId())).findFirst();
+        if(walletOptional.isEmpty()) {
+            throw new WalletNotFoundException("Impossible to create transaction. Wallet not found");
+        }
+        WalletDto wallet = walletOptional.get();
+        countNewWalletBalance(transactionDto, wallet);
+        return transactionRepository.save(transactionDto);
+    }
+
     private void countNewWalletBalance(TransactionDto transaction, WalletDto wallet) {
         BigDecimal newBalance = null;
         Long typeId = transaction.getTypeId();

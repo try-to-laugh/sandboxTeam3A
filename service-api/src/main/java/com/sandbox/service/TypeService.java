@@ -6,4 +6,6 @@ import java.util.Optional;
 
 public interface TypeService {
     Optional<TypeDto> findNameById(Long id);
+
+    TypeDto findByName(String name);
 }
