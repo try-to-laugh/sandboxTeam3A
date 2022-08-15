@@ -1,9 +1,9 @@
 package com.sandbox.rest;
 
 import com.sandbox.api.TransactionsApi;
-import com.sandbox.model.CreateTransactionRequest;
 import com.sandbox.model.FilterParameter;
 import com.sandbox.model.SortParameter;
+import com.sandbox.model.TransactionRequestDto;
 import com.sandbox.model.TransactionResponseDto;
 import com.sandbox.model.TransactionTypeParameter;
 import com.sandbox.service.TransactionService;
@@ -22,7 +22,7 @@ public class TransactionsController implements TransactionsApi {
     private final TransactionService transactionService;
 
     @Override
-    public ResponseEntity<Long> createTransaction(@NotNull @Valid TransactionTypeParameter transactionsType, @Valid CreateTransactionRequest createTransactionRequest) {
+    public ResponseEntity<Long> createTransaction(@NotNull @Valid TransactionTypeParameter transactionsType, @Valid TransactionRequestDto transactionRequestDto) {
         return null;
     }
 
@@ -42,7 +42,7 @@ public class TransactionsController implements TransactionsApi {
     }
 
     @Override
-    public ResponseEntity<TransactionResponseDto> updateTransactionById(@NotNull @Valid TransactionTypeParameter transactionsType, Long transactionId, @Valid CreateTransactionRequest createTransactionRequest) {
+    public ResponseEntity<TransactionResponseDto> updateTransactionById(@NotNull @Valid TransactionTypeParameter transactionsType, Long transactionId, @Valid TransactionRequestDto transactionRequestDto) {
         return null;
     }
 }

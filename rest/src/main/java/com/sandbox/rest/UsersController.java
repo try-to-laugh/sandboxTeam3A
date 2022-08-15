@@ -38,7 +38,7 @@ public class UsersController implements UsersApi {
     private String authorizationHeader;
 
     @Override
-    public ResponseEntity<Void> deleteUserById(Long userId) {
+    public ResponseEntity<Void> deleteUser() {
         return null;
     }
 
