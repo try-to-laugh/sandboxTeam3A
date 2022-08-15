@@ -7,6 +7,7 @@ import com.sandbox.model.WalletRequestDto;
 import com.sandbox.model.WalletResponseDto;
 import com.sandbox.service.WalletService;
 
+import com.sandbox.util.UserDetailsUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,13 +29,14 @@ public class WalletsController implements WalletsApi {
 
     @Override
     public ResponseEntity<Long> createWallet(@Valid WalletRequestDto walletRequestDto) {
-        return null;
+        String username = UserDetailsUtil.getUsername();
+        WalletDto walletDto = walletMapperRest.fromWalletRequestDtoToWalletDto(walletRequestDto);
+        return new ResponseEntity<Long>(walletService.createWallet(walletDto, username), HttpStatus.CREATED);
     }
 
     @Override
     public ResponseEntity deleteWalletById(@PathVariable Long walletId) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String userName = userDetails.getUsername();
+        String userName = UserDetailsUtil.getUsername();
         walletService.deleteById(walletId, userName);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
@@ -52,8 +54,7 @@ public class WalletsController implements WalletsApi {
 
     @Override
     public ResponseEntity<WalletResponseDto> updateWalletById(Long walletId, @Valid WalletRequestDto walletRequestDto) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String userName = userDetails.getUsername();
+        String userName = UserDetailsUtil.getUsername();
         WalletDto changeWallet = walletMapperRest.fromWalletRequestDtoToWalletDto(walletRequestDto);
         WalletDto responseWallet = walletService.updateWalletById(walletId, changeWallet, userName);
         return new ResponseEntity<>(walletMapperRest.fromWalletDtoToWalletResponseDto(responseWallet), HttpStatus.OK);

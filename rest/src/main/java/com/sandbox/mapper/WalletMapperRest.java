@@ -9,9 +9,9 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface WalletMapperRest {
 
-    @Mapping(source = "defaultWallet", target = "default")
+    @Mapping(source = "defaultWallet", target = "isDefault")
     WalletResponseDto fromWalletDtoToWalletResponseDto(WalletDto walletDto);
 
-    @Mapping(source = "default", target = "defaultWallet")
+    @Mapping(source = "isDefault", target = "defaultWallet")
     WalletDto fromWalletRequestDtoToWalletDto(WalletRequestDto walletRequestDto);
 }
