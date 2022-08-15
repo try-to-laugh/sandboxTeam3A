@@ -22,7 +22,7 @@ public class TransactionsController implements TransactionsApi {
     private final TransactionService transactionService;
 
     @Override
-    public ResponseEntity<Long> createTransaction(@NotNull @Valid TransactionTypeParameter transactionsType, @Valid TransactionRequestDto transactionRequestDto) {
+    public ResponseEntity<Long> createTransaction(@Valid TransactionRequestDto transactionRequestDto) {
         return null;
     }
 
@@ -42,7 +42,7 @@ public class TransactionsController implements TransactionsApi {
     }
 
     @Override
-    public ResponseEntity<TransactionResponseDto> updateTransactionById(@NotNull @Valid TransactionTypeParameter transactionsType, Long transactionId, @Valid TransactionRequestDto transactionRequestDto) {
+    public ResponseEntity<TransactionResponseDto> updateTransactionById(Long transactionId, @Valid TransactionRequestDto transactionRequestDto) {
         return null;
     }
 }

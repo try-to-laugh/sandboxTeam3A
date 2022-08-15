@@ -2,6 +2,7 @@ package com.sandbox.repository;
 
 import com.sandbox.dto.WalletDto;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface WalletRepository {
@@ -15,4 +16,6 @@ public interface WalletRepository {
     void deleteById(Long id);
 
     Optional<WalletDto> findWalletWithMaxBalance(Long userId, Long walletId);
+
+    List<WalletDto> findAll(Long userId);
 }

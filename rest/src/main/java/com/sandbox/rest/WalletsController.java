@@ -11,8 +11,6 @@ import com.sandbox.util.UserDetailsUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,34 +25,35 @@ public class WalletsController implements WalletsApi {
 
     @Override
     public ResponseEntity<Long> createWallet(@Valid WalletRequestDto walletRequestDto) {
-        String username = UserDetailsUtil.getUsername();
         WalletDto walletDto = walletMapperRest.fromWalletRequestDtoToWalletDto(walletRequestDto);
-        return new ResponseEntity<Long>(walletService.createWallet(walletDto, username), HttpStatus.CREATED);
+        return new ResponseEntity<>(walletService.createWallet(walletDto, UserDetailsUtil.getUsername()), HttpStatus.CREATED);
     }
 
     @Override
     public ResponseEntity deleteWalletById(@PathVariable Long walletId) {
-        String userName = UserDetailsUtil.getUsername();
-        walletService.deleteById(walletId, userName);
+        walletService.deleteById(walletId, UserDetailsUtil.getUsername());
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @Override
     public ResponseEntity<List<WalletResponseDto>> getAllWallets() {
-        return null;
+        List<WalletDto> walletDtoList = walletService.getWallets(UserDetailsUtil.getUsername());
+        List<WalletResponseDto> walletResponseDtoList = walletDtoList.stream()
+                .map(walletMapperRest::fromWalletDtoToWalletResponseDto)
+                .toList();
+        return new ResponseEntity<>(walletResponseDtoList, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<WalletResponseDto> getWalletById(@PathVariable Long walletId) {
-        WalletDto walletDto = walletService.getWalletById(walletId);
+        WalletDto walletDto = walletService.getWalletById(walletId, UserDetailsUtil.getUsername());
         return new ResponseEntity<>(walletMapperRest.fromWalletDtoToWalletResponseDto(walletDto), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<WalletResponseDto> updateWalletById(Long walletId, @Valid WalletRequestDto walletRequestDto) {
-        String userName = UserDetailsUtil.getUsername();
         WalletDto changeWallet = walletMapperRest.fromWalletRequestDtoToWalletDto(walletRequestDto);
-        WalletDto responseWallet = walletService.updateWalletById(walletId, changeWallet, userName);
+        WalletDto responseWallet = walletService.updateWalletById(walletId, changeWallet, UserDetailsUtil.getUsername());
         return new ResponseEntity<>(walletMapperRest.fromWalletDtoToWalletResponseDto(responseWallet), HttpStatus.OK);
     }
 }

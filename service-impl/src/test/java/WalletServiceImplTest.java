@@ -4,8 +4,8 @@ import com.sandbox.dto.RoleDto;
 import com.sandbox.enums.Currency;
 import com.sandbox.exception.BudgetRuntimeException;
 import com.sandbox.exception.WalletNotFoundException;
-import com.sandbox.repository.UserRepository;
 import com.sandbox.repository.WalletRepository;
+import com.sandbox.service.UserService;
 import com.sandbox.service.WalletServiceImpl;
 import org.junit.jupiter.api.Test;
 
@@ -17,9 +17,11 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
-import java.util.Set;
-import  java.util.HashSet;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -38,7 +40,7 @@ class WalletServiceImplTest {
     @Mock
     private WalletRepository mockWalletRepository;
     @Mock
-    private UserRepository mockUserRepository;
+    private UserService mockUserService;
 
     @Captor
     ArgumentCaptor<WalletDto> argCaptor;
@@ -62,7 +64,7 @@ class WalletServiceImplTest {
             .build();
 
     @Test
-    void deleteById() {
+    public void deleteById() {
         Set<RoleDto> roles = new HashSet<>();
         roles.add(new RoleDto(1L, "Admin"));
         Set<WalletDto> wallets = new HashSet<>();
@@ -76,27 +78,27 @@ class WalletServiceImplTest {
                     return null;
                 }
         ).when(mockWalletRepository).deleteById(1L);
-        Mockito.when(mockUserRepository.findByUsername("johnbullon")).thenReturn(Optional.of(owner));
+        Mockito.when(mockUserService.findUserByUsername("johnbullon")).thenReturn(owner);
         Mockito.when(mockWalletRepository.findById(1L)).thenReturn(Optional.of(wallet));
         walletService.deleteById(1L, owner.getUsername());
         verify(mockWalletRepository).deleteById(1L);
     }
 
     @Test
-    void walletNotExistForDeletingTest() {
+    public void walletNotExistForDeletingTest() {
         Set<RoleDto> roles = new HashSet<>();
         roles.add(new RoleDto(1L, "Admin"));
         Set<WalletDto> wallets = new HashSet<>();
 
         UserDto owner = new UserDto(1L, "John", "Bulon", "johnbullon", "123rhfjcdswe", roles, wallets);
-        Mockito.when(mockUserRepository.findByUsername(owner.getUsername())).thenReturn(Optional.of(owner));
+        Mockito.when(mockUserService.findUserByUsername(owner.getUsername())).thenReturn(owner);
         assertThatThrownBy(() -> walletService.deleteById(2L, "johnbullon"))
                 .isInstanceOf(WalletNotFoundException.class)
                 .hasMessage("Impossible to delete this wallet. Wallet not found with id " + 2L);
     }
 
     @Test
-    void changeDefaultWallet() {
+    public void changeDefaultWallet() {
         Set<WalletDto> wallets = new HashSet<>();
         Set<RoleDto> roles = new HashSet<>();
         UserDto owner = new UserDto(1L, "John", "Bulon", "johnbullon", "123rhfjcdswe", roles, wallets);
@@ -106,10 +108,9 @@ class WalletServiceImplTest {
         wallets.add(walletDefault);
         wallets.add(walletNotDefault);
         wallets.add(walletNotDefaultSecond);
-        Mockito.when(mockUserRepository.findByUsername(owner.getUsername())).thenReturn(Optional.of(owner));
+        Mockito.when(mockUserService.findUserByUsername(owner.getUsername())).thenReturn(owner);
         Mockito.when(mockWalletRepository.findById(walletDefault.getId())).thenReturn(Optional.of(walletDefault));
-        Mockito.when(mockUserRepository.findById(walletDefault.getUserId())).thenReturn(Optional.of(owner));
-        Mockito.when(mockWalletRepository.findWalletWithMaxBalance(owner.getId(),walletDefault.getId())).thenReturn(Optional.of(walletNotDefault));
+        Mockito.when(mockWalletRepository.findWalletWithMaxBalance(owner.getId(), walletDefault.getId())).thenReturn(Optional.of(walletNotDefault));
         walletService.deleteById(walletDefault.getId(), owner.getUsername());
 
         verify(mockWalletRepository, times(1)).save(argCaptor.capture());
@@ -119,7 +120,7 @@ class WalletServiceImplTest {
     }
 
     @Test
-    void walletUpdatedSuccessfullyTest() {
+    public void walletUpdatedSuccessfullyTest() {
         WalletDto updateWallet = WalletDto.builder()
                 .id(1L)
                 .name("wallet2")
@@ -129,7 +130,7 @@ class WalletServiceImplTest {
                 .userId(1L)
                 .build();
         Mockito.when(mockWalletRepository.findById(1L)).thenReturn(Optional.of(walletToChange));
-        Mockito.when(mockUserRepository.findByUsername("Petir")).thenReturn(Optional.of(walletOwner));
+        Mockito.when(mockUserService.findUserByUsername("Petir")).thenReturn(walletOwner);
         WalletDto changedWallet = walletService.updateWalletById(1L, updateWallet, "Petir");
         assertEquals(walletToChange.getName(), changedWallet.getName());
         assertEquals(walletToChange.isDefaultWallet(), changedWallet.isDefaultWallet());
@@ -137,7 +138,7 @@ class WalletServiceImplTest {
     }
 
     @Test
-    void WalletStatusChangedToNonDefault() {
+    public void WalletStatusChangedToNonDefault() {
         WalletDto controlWallet = WalletDto.builder()
                 .id(2L)
                 .name("wallet2")
@@ -158,15 +159,14 @@ class WalletServiceImplTest {
                 .thenReturn(Optional.of(controlWallet));
         Mockito.when(mockWalletRepository.findById(1L))
                 .thenReturn(Optional.of(walletToChange));
-        Mockito.when(mockUserRepository.findByUsername("Petir")).thenReturn(Optional.of(walletOwner));
+        Mockito.when(mockUserService.findUserByUsername("Petir")).thenReturn(walletOwner);
         WalletDto changedWallet = walletService.updateWalletById(1L, updateWallet, "Petir");
         assertFalse(controlWallet.isDefaultWallet());
         assertEquals(changedWallet.isDefaultWallet(), updateWallet.isDefaultWallet());
-
     }
 
     @Test
-    void notWalletOwner() {
+    public void notWalletOwner() {
         WalletDto updateWallet = WalletDto.builder()
                 .id(1L)
                 .name("wallet2")
@@ -184,27 +184,64 @@ class WalletServiceImplTest {
                 .roles(new HashSet<>())
                 .wallets(new HashSet<>())
                 .build();
-        Mockito.when(mockUserRepository.findByUsername("Artist")).thenReturn(Optional.of(notWalletOwner));
-        Mockito.when(mockUserRepository.findByUsername("Petir")).thenReturn(Optional.of(walletOwner));
+        Mockito.when(mockUserService.findUserByUsername("Artist")).thenReturn(notWalletOwner);
+        Mockito.when(mockUserService.findUserByUsername("Petir")).thenReturn(walletOwner);
         Mockito.when(mockWalletRepository.findById(1L)).thenReturn(Optional.of(walletToChange));
         assertThatThrownBy(() -> walletService.updateWalletById(1L, updateWallet, "Artist"))
                 .isInstanceOf(WalletNotFoundException.class)
                 .hasMessage("Wallet with  id = " + walletToChange.getId() + " not found");
-
     }
 
     @Test
-    void getWalletByIdTest() {
+    public void getWalletByIdTest() {
+        Mockito.when(mockUserService.findUserByUsername("Petir")).thenReturn(walletOwner);
         Mockito.when(mockWalletRepository.findById(1L)).thenReturn(Optional.of(walletToChange));
-        WalletDto actualWallet = walletService.getWalletById(1L);
+        WalletDto actualWallet = walletService.getWalletById(1L, walletOwner.getUsername());
         assertEquals(walletToChange, actualWallet);
     }
 
     @Test
-    void walletNotFoundGetByIdTest() {
-        assertThatThrownBy(() -> walletService.getWalletById(20L))
+    public void walletNotFoundGetByIdTest() {
+        Mockito.when(mockUserService.findUserByUsername("Petir")).thenReturn(walletOwner);
+        assertThatThrownBy(() -> walletService.getWalletById(20L, walletOwner.getUsername()))
                 .isInstanceOf(WalletNotFoundException.class)
-                .hasMessage("This wallet not found");
+                .hasMessage("This wallet doesn't exist");
+    }
+
+    @Test
+    public void walletNotAvailableForUserGetByIdTest() {
+        WalletDto wallet = WalletDto.builder()
+                .id(2L)
+                .name("wallet2")
+                .balance(new BigDecimal(1300))
+                .defaultWallet(true)
+                .currency(Currency.USD)
+                .userId(2L)
+                .build();
+        Mockito.when(mockWalletRepository.findById(2L)).thenReturn(Optional.of(wallet));
+        Mockito.when(mockUserService.findUserByUsername("Petir")).thenReturn(walletOwner);
+        assertThatThrownBy(() -> walletService.getWalletById(wallet.getId(), walletOwner.getUsername()))
+                .isInstanceOf(WalletNotFoundException.class)
+                .hasMessage("Wallet not found");
+    }
+
+    @Test
+    public void getWalletsTest() {
+        WalletDto wallet = WalletDto.builder()
+                .id(2L)
+                .name("wallet2")
+                .balance(new BigDecimal(1300))
+                .defaultWallet(true)
+                .currency(Currency.USD)
+                .userId(1L)
+                .build();
+        List<WalletDto> expectedWalleList = new ArrayList<>();
+        expectedWalleList.add(walletToChange);
+        expectedWalleList.add(wallet);
+        Mockito.when(mockUserService.findUserByUsername("Petir")).thenReturn(walletOwner);
+        Mockito.when(mockWalletRepository.findAll(1L)).thenReturn(expectedWalleList);
+        List<WalletDto> actualWalleList = walletService.getWallets(walletOwner.getUsername());
+        assertEquals(expectedWalleList, actualWalleList);
     }
 
     @Test
@@ -225,7 +262,7 @@ class WalletServiceImplTest {
                 .currency(Currency.USD)
                 .userId(1L)
                 .build();
-        Mockito.when(mockUserRepository.findByUsername(any())).thenReturn(Optional.of(user));
+        Mockito.when(mockUserService.findUserByUsername(any())).thenReturn(user);
         Mockito.when(mockWalletRepository.save(any())).thenReturn(1L);
         walletService.createWallet(walletToAdd, user.getUsername());
         assertTrue(walletToAdd.isDefaultWallet());
@@ -257,7 +294,7 @@ class WalletServiceImplTest {
                 .userId(1L)
                 .build();
         user.getWallets().add(walletExisted);
-        Mockito.when(mockUserRepository.findByUsername(any())).thenReturn(Optional.of(user));
+        Mockito.when(mockUserService.findUserByUsername(any())).thenReturn(user);
         Mockito.when(mockWalletRepository.save(any())).thenReturn(1L);
         walletService.createWallet(walletToAdd, user.getUsername());
         assertTrue(walletToAdd.isDefaultWallet());
@@ -290,7 +327,7 @@ class WalletServiceImplTest {
                 .userId(1L)
                 .build();
         user.getWallets().add(walletExisted);
-        Mockito.when(mockUserRepository.findByUsername(any())).thenReturn(Optional.of(user));
+        Mockito.when(mockUserService.findUserByUsername(any())).thenReturn(user);
         Mockito.when(mockWalletRepository.save(any())).thenReturn(1L);
         assertThatThrownBy(() -> walletService.createWallet(walletToAdd, user.getUsername())).isInstanceOf(
                 BudgetRuntimeException.class).hasMessage("Such wallet already exists, please choose another currency or change the name of wallet");

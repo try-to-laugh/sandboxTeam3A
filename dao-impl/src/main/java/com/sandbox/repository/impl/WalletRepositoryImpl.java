@@ -11,11 +11,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -68,5 +68,10 @@ public class WalletRepositoryImpl implements WalletRepository {
         entityManager.getTransaction().commit();
         WalletDto walletDto = walletMapper.toWalletDto(walletWithMaxBalance);
         return Optional.of(walletDto);
+    }
+
+    @Override
+    public List<WalletDto> findAll(Long userId) {
+        return walletRepositoryJpa.findAll(userId).stream().map(walletMapper::toWalletDto).toList();
     }
 }
