@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -27,6 +28,7 @@ public class WalletServiceImpl implements WalletService {
     public Long createWallet(WalletDto walletDto, String username) {
         UserDto userDto = userService.findUserByUsername(username);
         walletDto.setUserId(userDto.getId());
+        walletDto.setBalance(BigDecimal.valueOf(0));
         Set<WalletDto> userWallets = userDto.getWallets();
         if (userWallets.isEmpty()) {
             walletDto.setDefaultWallet(true);
