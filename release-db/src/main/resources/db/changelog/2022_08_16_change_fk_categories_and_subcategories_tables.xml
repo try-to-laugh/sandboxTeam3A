@@ -1,0 +1,38 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+    <changeSet id="2022_08_16_change_fk_categories_and_subcategories_tables" author="Artsiom Vaskevich">
+        <dropForeignKeyConstraint baseTableCatalogName="sub_categories"
+                                  baseTableName="categories"
+                                  constraintName="fk_sub_category"/>
+        <dropColumn tableName="categories">
+            <column name="sub_category_id"/>
+        </dropColumn>
+        <addColumn tableName="sub_categories">
+            <column name="category_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="sub_categories" baseColumnNames="category_id" constraintName="fk_category"
+                                 referencedTableName="categories"
+                                 referencedColumnNames="id"/>
+        <rollback>
+            <dropForeignKeyConstraint baseTableCatalogName="categories"
+                                      baseTableName="sub_categories"
+                                      constraintName="fk_category"/>
+            <dropColumn tableName="sub_categories">
+                <column name="category_id"/>
+            </dropColumn>
+            <addColumn tableName="categories">
+                <column name="sub_category_id" type="bigint">
+                    <constraints nullable="false"/>
+                </column>
+            </addColumn>
+            <addForeignKeyConstraint baseTableName="categories" baseColumnNames="sub_category_id" constraintName="fk_sub_category"
+                                     referencedTableName="sub_categories"
+                                     referencedColumnNames="id"
+                                     onDelete="CASCADE"/>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
