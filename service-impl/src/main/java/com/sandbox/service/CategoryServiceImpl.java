@@ -21,6 +21,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public CategoryDto findById(Long id) {
+        return categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("no cat"));
+    }
+
+    @Override
     public List<CategoryDto> getCategories(String categoryType) {
         return categoryRepository.getCategories(categoryType);
     }
