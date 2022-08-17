@@ -1,3 +1,5 @@
+package com.sandbox.service;
+
 import com.sandbox.dto.UserDto;
 import com.sandbox.dto.WalletDto;
 import com.sandbox.dto.RoleDto;
@@ -5,8 +7,6 @@ import com.sandbox.enums.Currency;
 import com.sandbox.exception.BudgetRuntimeException;
 import com.sandbox.exception.WalletNotFoundException;
 import com.sandbox.repository.WalletRepository;
-import com.sandbox.service.UserService;
-import com.sandbox.service.WalletServiceImpl;
 import org.junit.jupiter.api.Test;
 
 import org.mockito.Captor;
