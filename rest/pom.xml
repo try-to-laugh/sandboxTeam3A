@@ -110,6 +110,12 @@
                             <goal>repackage</goal>
                         </goals>
                         <configuration>
+                            <requiresUnpack>
+                                <dependency>
+                                    <groupId>com.sandbox</groupId>
+                                    <artifactId>dao-impl</artifactId>
+                                </dependency>
+                            </requiresUnpack>
                             <classifier>spring-boot</classifier>
                             <mainClass>com.sandbox.BudgetApplication</mainClass>
                         </configuration>
