@@ -27,4 +27,10 @@ public class Category {
 
     @Column
     private String name;
+
+    @Column
+    private String color;
+
+    @Column(name = "type_id")
+    private Long typeId;
 }

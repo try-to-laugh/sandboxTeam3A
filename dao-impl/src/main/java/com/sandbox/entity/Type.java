@@ -1,6 +1,5 @@
 package com.sandbox.entity;
 
-import com.sandbox.enums.TypeName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,8 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,6 +26,6 @@ public class Type implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private TypeName name;
+    @Column
+    private String name;
 }

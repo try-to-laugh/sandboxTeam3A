@@ -35,8 +35,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void save(UserDto userDto) {
-        userRepositoryJpa.save(userMapper.toUser(userDto));
+    public Long save(UserDto userDto) {
+        return userRepositoryJpa.save(userMapper.toUser(userDto)).getId();
     }
 
     @Override
