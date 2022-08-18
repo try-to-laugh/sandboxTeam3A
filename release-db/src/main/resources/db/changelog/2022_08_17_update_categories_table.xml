@@ -1,0 +1,24 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+    <changeSet id="2022_08_17_update_categories_table" author="Artsiom Vaskevich">
+        <addColumn tableName="categories">
+            <column name="color" type="varchar(7)"/>
+            <column name="type_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="categories" baseColumnNames="type_id" constraintName="fk_types"
+                                 referencedTableName="types"
+                                 referencedColumnNames="id"/>
+        <rollback>
+            <dropForeignKeyConstraint baseTableCatalogName="types"
+                                      baseTableName="categories"
+                                      constraintName="fk_types"/>
+            <dropColumn tableName="categories">
+                <column name="type_id"/>
+            </dropColumn>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
