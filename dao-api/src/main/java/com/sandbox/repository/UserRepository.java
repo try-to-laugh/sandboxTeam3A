@@ -13,7 +13,7 @@ public interface UserRepository {
 
     List<UserDto> findAll();
 
-    void save(UserDto userDto);
+    Long save(UserDto userDto);
 
     Optional<UserDto> findById(Long idUser);
 }
