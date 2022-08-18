@@ -4,6 +4,7 @@ import com.sandbox.dto.TransactionDto;
 import com.sandbox.dto.TypeDto;
 import com.sandbox.dto.UserDto;
 import com.sandbox.dto.WalletDto;
+import com.sandbox.enums.TypeName;
 import com.sandbox.exception.WalletNotFoundException;
 import com.sandbox.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,31 +27,31 @@ public class TransactionServiceImpl implements TransactionService {
     private final TypeService typeService;
 
     @Override
-    public void deleteById(Long idTransaction, String authorizedUsername) {
-        Optional<TransactionDto> transactionDto = transactionRepository.findById(idTransaction);
+    public void deleteById(Long transactionId, String authorizedUsername) {
+        Optional<TransactionDto> transactionDto = transactionRepository.findById(transactionId);
         if (!transactionDto.isPresent()) {
-            throw new WalletNotFoundException("Impossible to delete this transaction. Transaction not found with id " + idTransaction);
+            throw new WalletNotFoundException("Impossible to delete this transaction. Transaction not found with id " + transactionId);
         }
         Long walletId = transactionDto.get().getWalletId();
         WalletDto wallet = walletService.getWalletById(walletId, authorizedUsername);
         UserDto authorizedUsernameUser = userService.findUserByUsername(authorizedUsername);
         if (!authorizedUsernameUser.getId().equals(wallet.getUserId())) {
-            throw new WalletNotFoundException("Impossible to delete this transaction. Transaction not found with id " + idTransaction);
+            throw new WalletNotFoundException("Impossible to delete this transaction. Transaction not found with id " + transactionId);
         }
         countNewWalletBalance(transactionDto.get(), wallet);
-        transactionRepository.deleteById(idTransaction);
+        transactionRepository.deleteById(transactionId);
         LOG.info("Transaction deleted");
     }
 
-    private void countNewWalletBalance(TransactionDto transactionDto, WalletDto wallet) {
+    private void countNewWalletBalance(TransactionDto transaction, WalletDto wallet) {
         BigDecimal newBalance = null;
-        Long typeId = transactionDto.getTypeId();
+        Long typeId = transaction.getTypeId();
         Optional<TypeDto> transactionType = typeService.findNameById(typeId);
-        String typeName = transactionType.get().getName().toString();
-        if (typeName.equals("INCOME")) {
-            newBalance = wallet.getBalance().subtract(transactionDto.getAmount());
-        } else if (typeName.equals("EXPENSE")) {
-            newBalance = wallet.getBalance().add(transactionDto.getAmount());
+        TypeName typeName = transactionType.get().getName();
+        if (typeName.equals(TypeName.INCOME)) {
+            newBalance = wallet.getBalance().subtract(transaction.getAmount());
+        } else if (typeName.equals(TypeName.EXPENSE)) {
+            newBalance = wallet.getBalance().add(transaction.getAmount());
         }
         wallet.setBalance(newBalance);
         LOG.info("Wallet balance changed");
