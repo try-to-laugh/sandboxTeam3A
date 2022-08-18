@@ -89,12 +89,18 @@ public class WalletServiceImpl implements WalletService {
         if (!updatedWallet.getUserId().equals(walletOwnerId)) {
             throw new WalletNotFoundException("Wallet with  id = " + walletId + " not found");
         }
-        Optional<WalletDto> defaultStatusWalletCheck =
-                walletRepository.findByStatus(requestWallet.isDefaultWallet(), walletOwnerId);
-        if (defaultStatusWalletCheck.isPresent()) {
-            WalletDto makeFalseWallet = defaultStatusWalletCheck.get();
-            makeFalseWallet.setDefaultWallet(false);
-            walletRepository.save(makeFalseWallet);
+        Optional<WalletDto> defaultWallet =
+                walletRepository.findByStatus(true, walletOwnerId);
+        if (defaultWallet.isPresent()) {
+            WalletDto makeFalseWallet = defaultWallet.get();
+            if (requestWallet.isDefaultWallet()) {
+                if (!makeFalseWallet.getId().equals(walletId)) {
+                    makeFalseWallet.setDefaultWallet(false);
+                    walletRepository.save(makeFalseWallet);
+                }
+            } else if (makeFalseWallet.getId().equals(walletId)) {
+                throw new BudgetRuntimeException("at least one wallet should be default");
+            }
         }
 
         updatedWallet.setName(requestWallet.getName());
