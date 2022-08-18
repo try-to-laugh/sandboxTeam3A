@@ -70,6 +70,11 @@ public class WalletServiceImpl implements WalletService {
         return walletRepository.findAll(walletOwnerId);
     }
 
+    @Override
+    public Long save(WalletDto walletDto) {
+        return walletRepository.save(walletDto);
+    }
+
     private void changeDefaultWallet(UserDto walletOwner, Long idWalletWhichDeleting) {
         if (walletOwner.getWallets().size() > 1) {
             Optional<WalletDto> walletWithMaxBalance = walletRepository.findWalletWithMaxBalance(walletOwner.getId(), idWalletWhichDeleting);

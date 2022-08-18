@@ -7,7 +7,9 @@ import com.sandbox.model.TransactionRequestDto;
 import com.sandbox.model.TransactionResponseDto;
 import com.sandbox.model.TransactionTypeParameter;
 import com.sandbox.service.TransactionService;
+import com.sandbox.util.UserDetailsUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +30,8 @@ public class TransactionsController implements TransactionsApi {
 
     @Override
     public ResponseEntity<Void> deleteTtransactionById(Long transactionId) {
-        return null;
+        transactionService.deleteById(transactionId, UserDetailsUtil.getUsername());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @Override
