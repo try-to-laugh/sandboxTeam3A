@@ -13,7 +13,7 @@ public interface UserService {
 
     UserDto findUserByUsername(String username);
 
-    void saveUser(UserDto userDto);
+    Long saveUser(UserDto userDto);
 
     UserDto addRoleToUser(UserDto userDto, RoleDto roleDto);
 

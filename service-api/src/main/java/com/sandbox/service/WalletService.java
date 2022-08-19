@@ -15,4 +15,6 @@ public interface WalletService {
     Long createWallet(WalletDto walletDto, String username);
 
     List<WalletDto> getWallets(String username);
+
+    Long save(WalletDto walletDto);
 }

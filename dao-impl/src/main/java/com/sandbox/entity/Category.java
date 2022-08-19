@@ -28,6 +28,9 @@ public class Category {
     @Column
     private String name;
 
-    @Column(name = "sub_category_id")
-    private Long subCategoryId;
+    @Column
+    private String color;
+
+    @Column(name = "type_id")
+    private Long typeId;
 }

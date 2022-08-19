@@ -28,4 +28,7 @@ public class SubCategory implements Serializable {
 
     @Column
     private String name;
+
+    @Column(name = "category_id")
+    private Long categoryId;
 }

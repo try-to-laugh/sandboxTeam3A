@@ -3,8 +3,7 @@ package com.sandbox.rest;
 import com.sandbox.api.UsersApi;
 import com.sandbox.config.LogOutCacheConfiguration;
 import com.sandbox.config.jwt.JwtTokenProvider;
-import com.sandbox.dto.UserDto;
-import com.sandbox.mapper.UserMapperRest;
+import com.sandbox.mapper.MapperRest;
 import com.sandbox.model.UserLoginDto;
 import com.sandbox.model.UserResponseDto;
 import com.sandbox.service.AuthenticationService;
@@ -12,13 +11,11 @@ import com.sandbox.service.RoleService;
 import com.sandbox.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.security.PermitAll;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
@@ -32,7 +29,7 @@ public class UsersController implements UsersApi {
     private final PasswordEncoder passwordEncoder;
     private final LogOutCacheConfiguration logOutCacheConfiguration;
 
-    private final UserMapperRest userMapperRest;
+    private final MapperRest<UserDto, UserLoginDto> userMapper;
 
     @Value("${jwt.header}")
     private String authorizationHeader;
@@ -50,7 +47,7 @@ public class UsersController implements UsersApi {
     @Override
     public ResponseEntity<Void> login(@Valid UserLoginDto userLoginDto) {
         UserDto userDto = authenticationService.authenticateUserAndGetToken(
-                userMapperRest.fromUserLoginDtoToUserDto(userLoginDto));
+                userMapper.toDto(userLoginDto));
         String token = jwtTokenProvider.createToken(userDto.getUsername(), userDto.getId(), userService.getUserRoles(userDto));
         return ResponseEntity.ok().header(authorizationHeader, "Bearer " + token).build();
     }
@@ -61,11 +58,10 @@ public class UsersController implements UsersApi {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(path = "/registration")
-    @PermitAll
-    public ResponseEntity<String> register(@RequestBody UserDto userDto) {
-        userService.saveUser(userService.addRoleToUser(userService.encodeAndSetPasswordToUser(userDto, passwordEncoder),
-                roleService.findRoleByName("USER")));
-        return ResponseEntity.ok().body("Registration was successful");
+    @Override
+    public ResponseEntity<Long> registration(@Valid UserLoginDto userLoginDto) {
+        UserDto userDto = userMapper.toDto(userLoginDto);
+        return new ResponseEntity<>(userService.saveUser(userService.addRoleToUser(userService.encodeAndSetPasswordToUser(userDto, passwordEncoder),
+                roleService.findRoleByName("USER"))), HttpStatus.CREATED);
     }
 }

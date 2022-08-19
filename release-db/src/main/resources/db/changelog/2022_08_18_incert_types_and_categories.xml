@@ -1,0 +1,146 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+    <changeSet id="2022_08_18_incert_types_and_categories.xml" author="Artsiom Vaskevich">
+        <insert tableName="types">
+            <column  name="id"  value="1"/>
+            <column  name="name"  value="Income"/>
+        </insert>
+        <insert tableName="types">
+            <column  name="id"  value="2"/>
+            <column  name="name"  value="Expense"/>
+        </insert>
+
+        <insert tableName="categories">
+            <column  name="name"  value="Salary"/>
+            <column  name="color"  value="#008000"/>
+            <column  name="type_id"  value="1"/>
+        </insert>
+        <insert tableName="categories">
+            <column  name="name"  value="Child support received"/>
+            <column  name="color"  value="#008000"/>
+            <column  name="type_id"  value="1"/>
+        </insert>
+        <insert tableName="categories">
+            <column  name="name"  value="Gift"/>
+            <column  name="color"  value="#008000"/>
+            <column  name="type_id"  value="1"/>
+        </insert>
+        <insert tableName="categories">
+            <column  name="name"  value="Partner’s salary"/>
+            <column  name="color"  value="#008000"/>
+            <column  name="type_id"  value="1"/>
+        </insert>
+
+        <insert tableName="categories">
+            <column  name="name"  value="Home &amp; utilities"/>
+            <column  name="color"  value="#ff0000"/>
+            <column  name="type_id"  value="2"/>
+        </insert>
+        <insert tableName="categories">
+            <column  name="name"  value="Insurance"/>
+            <column  name="color"  value="#ff0000"/>
+            <column  name="type_id"  value="2"/>
+        </insert>
+        <insert tableName="categories">
+            <column  name="name"  value="Food"/>
+            <column  name="color"  value="#ff0000"/>
+            <column  name="type_id"  value="2"/>
+        </insert>
+        <insert tableName="categories">
+            <column  name="name"  value="Entertainment &amp; Hobby"/>
+            <column  name="color"  value="#ff0000"/>
+            <column  name="type_id"  value="2"/>
+        </insert>
+        <insert tableName="categories">
+            <column  name="name"  value="Health &amp; Sport"/>
+            <column  name="color"  value="#ff0000"/>
+            <column  name="type_id"  value="2"/>
+        </insert>
+        <insert tableName="categories">
+            <column  name="name"  value="Beauty"/>
+            <column  name="color"  value="#ff0000"/>
+            <column  name="type_id"  value="2"/>
+        </insert>
+        <insert tableName="categories">
+            <column  name="name"  value="Clothes"/>
+            <column  name="color"  value="#ff0000"/>
+            <column  name="type_id"  value="2"/>
+        </insert>
+        <insert tableName="categories">
+            <column  name="name"  value="Transport"/>
+            <column  name="color"  value="#ff0000"/>
+            <column  name="type_id"  value="2"/>
+        </insert>
+        <insert tableName="categories">
+            <column  name="name"  value="Education"/>
+            <column  name="color"  value="#ff0000"/>
+            <column  name="type_id"  value="2"/>
+        </insert>
+        <insert tableName="categories">
+            <column  name="name"  value="Pets"/>
+            <column  name="color"  value="#ff0000"/>
+            <column  name="type_id"  value="2"/>
+        </insert>
+        <insert tableName="categories">
+            <column  name="name"  value="Children"/>
+            <column  name="color"  value="#ff0000"/>
+            <column  name="type_id"  value="2"/>
+        </insert>
+        <rollback>
+            <delete tableName="categories">
+                <where>name = 'Salary'</where>
+            </delete>
+            <delete tableName="categories">
+                <where>name = 'Child support received'</where>
+            </delete>
+            <delete tableName="categories">
+                <where>name = 'Gift'</where>
+            </delete>
+            <delete tableName="categories">
+                <where>name = 'Partner’s salary'</where>
+            </delete>
+            <delete tableName="categories">
+                <where>name = 'Home &amp; utilities'</where>
+            </delete>
+            <delete tableName="categories">
+                <where>name = 'Insurance'</where>
+            </delete>
+            <delete tableName="categories">
+                <where>name = 'Food'</where>
+            </delete>
+            <delete tableName="categories">
+                <where>name = 'Entertainment &amp; Hobby'</where>
+            </delete>
+            <delete tableName="categories">
+                <where>name = 'Health &amp; Sport'</where>
+            </delete>
+            <delete tableName="categories">
+                <where>name = 'Beauty'</where>
+            </delete>
+            <delete tableName="categories">
+                <where>name = 'Clothes'</where>
+            </delete>
+            <delete tableName="categories">
+                <where>name = 'Transport'</where>
+            </delete>
+            <delete tableName="categories">
+                <where>name = 'Education'</where>
+            </delete>
+            <delete tableName="categories">
+                <where>name = 'Pets'</where>
+            </delete>
+            <delete tableName="categories">
+                <where>name = 'Children'</where>
+            </delete>
+
+            <delete tableName="types">
+                <where>name = 'Income'</where>
+            </delete>
+            <delete tableName="types">
+                <where>name = 'Expense'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
