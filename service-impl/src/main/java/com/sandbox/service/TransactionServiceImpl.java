@@ -47,7 +47,7 @@ public class TransactionServiceImpl implements TransactionService {
         BigDecimal newBalance = null;
         Long typeId = transaction.getTypeId();
         Optional<TypeDto> transactionType = typeService.findNameById(typeId);
-        TypeName typeName = transactionType.get().getName();
+        TypeName typeName = TypeName.valueOf(transactionType.get().getName());
         if (typeName.equals(TypeName.INCOME)) {
             newBalance = wallet.getBalance().subtract(transaction.getAmount());
         } else if (typeName.equals(TypeName.EXPENSE)) {
