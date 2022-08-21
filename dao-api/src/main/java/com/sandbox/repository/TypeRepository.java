@@ -8,5 +8,5 @@ public interface TypeRepository {
 
     Optional<TypeDto> findByName(String name);
 
-    Optional<TypeDto> findNameById(Long id);
+    Optional<TypeDto> findById(Long id);
 }

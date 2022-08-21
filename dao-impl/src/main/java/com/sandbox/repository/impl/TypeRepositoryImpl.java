@@ -23,7 +23,7 @@ public class TypeRepositoryImpl implements TypeRepository {
     }
 
     @Override
-    public Optional<TypeDto> findNameById(Long id) {
+    public Optional<TypeDto> findById(Long id) {
         Optional<Type> transactionType = typeRepositoryJpa.findById(id);
         return transactionType.map(typeMapper::toTypeDto);
     }

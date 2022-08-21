@@ -16,7 +16,7 @@ public class TypeServiceImpl implements TypeService {
 
     @Override
     public Optional<TypeDto> findNameById(Long id) {
-        return typeRepository.findNameById(id);
+        return typeRepository.findById(id);
     }
 
     @Override

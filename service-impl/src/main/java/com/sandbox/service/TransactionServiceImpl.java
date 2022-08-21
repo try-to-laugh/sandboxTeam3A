@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Set;
 
 import java.util.List;
 
@@ -58,7 +59,27 @@ public class TransactionServiceImpl implements TransactionService {
         }
         WalletDto wallet = walletOptional.get();
         walletService.updateВalance(transactionDto, wallet);
-        return transactionRepository.save(transactionDto);
+        Long id = transactionRepository.save(transactionDto);
+        LOG.info("Transaction created");
+        return id;
+
+    }
+
+    @Override
+    public TransactionDto updateTransactionById(Long transactionId, TransactionDto transactionDto, String username) {
+        UserDto user = userService.findUserByUsername(username);
+        Optional<WalletDto> walletOptional = user.getWallets().stream()
+                .filter(walletDto -> walletDto.getId().equals(transactionDto.getWalletId())).findFirst();
+        if(walletOptional.isEmpty()) {
+            throw new WalletNotFoundException("Impossible to update transaction. Wallet not found");
+        }
+        WalletDto wallet = walletOptional.get();
+        updateWalletBalance(transactionDto, wallet);
+        deleteById(transactionId, username);
+        Long newId = transactionRepository.save(transactionDto);
+        LOG.info("Transaction created");
+        transactionDto.setId(newId);
+        return transactionDto;
     }
 
     @Override

@@ -18,4 +18,6 @@ public interface TransactionService {
     Long createTransaction(TransactionDto transactionDto, String username);
 
     Optional<TransactionDto> findById(Long transactionId);
+
+    TransactionDto updateTransactionById(Long TransactionId, TransactionDto transactionDto, String username);
 }
