@@ -1,11 +1,15 @@
 package com.sandbox.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.sql.Date;
 
 @Data
+@Builder
+@AllArgsConstructor
 public class TransactionDto {
     private Long id;
     private BigDecimal amount;
