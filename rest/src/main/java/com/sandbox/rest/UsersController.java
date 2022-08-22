@@ -3,6 +3,7 @@ package com.sandbox.rest;
 import com.sandbox.api.UsersApi;
 import com.sandbox.config.LogOutCacheConfiguration;
 import com.sandbox.config.jwt.JwtTokenProvider;
+import com.sandbox.dto.UserDto;
 import com.sandbox.mapper.MapperRest;
 import com.sandbox.model.UserLoginDto;
 import com.sandbox.model.UserResponseDto;
