@@ -8,6 +8,7 @@ import com.sandbox.repository.CategoryRepositoryJpa;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -21,5 +22,10 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     public Optional<CategoryDto> findByName(String name) {
         Optional<Category> category = categoryRepositoryJpa.findByName(name);
         return category.map(categoryMapper::toCategoryDto);
+    }
+
+    @Override
+    public List<CategoryDto> getCategories(String categoryType) {
+        return categoryRepositoryJpa.findAll(categoryType).stream().map(categoryMapper::toCategoryDto).toList();
     }
 }
