@@ -97,6 +97,10 @@
             <groupId>com.sandbox</groupId>
             <artifactId>rest-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

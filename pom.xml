@@ -38,6 +38,7 @@
         <google.guava.version>31.1-jre</google.guava.version>
         <hibernate-core>5.4.0.Final</hibernate-core>
         <hibernate-entitymanager>5.4.10.Final</hibernate-entitymanager>
+        <springfox-swagger>3.0.0</springfox-swagger>
     </properties>
 
     <dependencyManagement>
@@ -153,6 +154,11 @@
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-entitymanager</artifactId>
                 <version>${hibernate-entitymanager}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-boot-starter</artifactId>
+                <version>${springfox-swagger}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
