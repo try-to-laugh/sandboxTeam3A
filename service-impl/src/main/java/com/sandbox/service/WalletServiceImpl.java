@@ -137,7 +137,7 @@ public class WalletServiceImpl implements WalletService {
         return walletDto;
     }
 
-    public void countNewWalletBalance(TransactionDto transaction, WalletDto wallet) {
+    public void updateВalance(TransactionDto transaction, WalletDto wallet) {
         BigDecimal newBalance = null;
         Long typeId = transaction.getTypeId();
         Optional<TypeDto> transactionType = typeService.findNameById(typeId);

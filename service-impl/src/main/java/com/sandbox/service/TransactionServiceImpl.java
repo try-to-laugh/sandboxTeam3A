@@ -1,7 +1,6 @@
 package com.sandbox.service;
 
 import com.sandbox.dto.TransactionDto;
-import com.sandbox.dto.TypeDto;
 import com.sandbox.dto.UserDto;
 import com.sandbox.dto.WalletDto;
 import com.sandbox.exception.WalletNotFoundException;
@@ -35,7 +34,7 @@ public class TransactionServiceImpl implements TransactionService {
         if (!authorizedUsernameUser.getId().equals(wallet.getUserId())) {
             throw new WalletNotFoundException("Impossible to delete this transaction. Transaction not found with id " + transactionId);
         }
-        walletService.countNewWalletBalance(transactionDto.get(), wallet);
+        walletService.updateВalance(transactionDto.get(), wallet);
         transactionRepository.deleteById(transactionId);
         LOG.info("Transaction deleted");
     }
@@ -49,7 +48,7 @@ public class TransactionServiceImpl implements TransactionService {
             throw new WalletNotFoundException("Impossible to create transaction. Wallet not found");
         }
         WalletDto wallet = walletOptional.get();
-        walletService.countNewWalletBalance(transactionDto, wallet);
+        walletService.updateВalance(transactionDto, wallet);
         return transactionRepository.save(transactionDto);
     }
 

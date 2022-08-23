@@ -19,7 +19,7 @@ public interface WalletService {
 
     Long save(WalletDto walletDto);
 
-    void countNewWalletBalance(TransactionDto transaction, WalletDto wallet);
+    void updateВalance(TransactionDto transaction, WalletDto wallet);
 
     long countTransactionByWalletId (Long walletId);
 }
