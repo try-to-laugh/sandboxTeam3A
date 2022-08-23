@@ -1,5 +1,6 @@
 package com.sandbox.service;
 
+import com.sandbox.dto.TransactionDto;
 import com.sandbox.dto.WalletDto;
 
 import java.util.List;
@@ -17,4 +18,8 @@ public interface WalletService {
     List<WalletDto> getWallets(String username);
 
     Long save(WalletDto walletDto);
+
+    void countNewWalletBalance(TransactionDto transaction, WalletDto wallet);
+
+    long countTransactionByWalletId (Long walletId);
 }

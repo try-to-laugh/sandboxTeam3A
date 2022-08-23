@@ -18,4 +18,6 @@ public interface WalletRepository {
     Optional<WalletDto> findWalletWithMaxBalance(Long userId, Long walletId);
 
     List<WalletDto> findAll(Long userId);
+
+    Long countTransactionByWalletId(Long walletId);
 }
