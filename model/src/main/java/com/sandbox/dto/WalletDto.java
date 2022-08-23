@@ -21,4 +21,5 @@ public class WalletDto {
     private boolean defaultWallet;
     private Currency currency;
     private Long userId;
+    private boolean archiveWallet;
 }

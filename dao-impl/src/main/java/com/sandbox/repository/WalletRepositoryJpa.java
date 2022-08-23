@@ -20,4 +20,7 @@ public interface WalletRepositoryJpa extends JpaRepository<Wallet, Long> {
     @Query("SELECT wallet FROM Wallet wallet WHERE wallet.userId = :userId ")
     List<Wallet> findAll(@Param("userId") Long userId);
 
+
+    @Query(value = "SELECT COUNT(transaction) FROM Transaction transaction WHERE transaction.walletId =:walletId")
+    Long countTransactionByWalletId(@Param("walletId") Long walletId);
 }
