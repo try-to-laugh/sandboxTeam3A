@@ -29,6 +29,12 @@ public class WalletRepositoryImpl implements WalletRepository {
     @Override
     public Optional<WalletDto> findById(Long id) {
         Optional<Wallet> wallet = walletRepositoryJpa.findById(id);
+        if (wallet.isPresent()) {
+            if (wallet.get().isArchiveWallet()) {
+                return Optional.empty();
+            }
+        }
+
         return wallet.map(walletMapper::toWalletDto);
     }
 
@@ -74,4 +80,10 @@ public class WalletRepositoryImpl implements WalletRepository {
     public List<WalletDto> findAll(Long userId) {
         return walletRepositoryJpa.findAll(userId).stream().map(walletMapper::toWalletDto).toList();
     }
+
+    @Override
+    public Long countTransactionByWalletId(Long walletId) {
+        return walletRepositoryJpa.countTransactionByWalletId(walletId);
+    }
+
 }

@@ -7,6 +7,8 @@ import java.util.List;
 
 import com.sandbox.dto.TransactionDto;
 
+import java.util.Optional;
+
 public interface TransactionService {
 
     void deleteById(Long id, String username);
@@ -14,4 +16,6 @@ public interface TransactionService {
     List<TransactionDto> viewTransactionsList(TransactionsViewParametersDto searchParameters);
 
     Long createTransaction(TransactionDto transactionDto, String username);
+
+    Optional<TransactionDto> findById(Long transactionId);
 }

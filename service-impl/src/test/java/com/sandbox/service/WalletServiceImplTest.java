@@ -52,6 +52,7 @@ class WalletServiceImplTest {
             .defaultWallet(false)
             .currency(Currency.EUR)
             .userId(1L)
+            .archiveWallet(false)
             .build();
     private final UserDto walletOwner = UserDto.builder()
             .id(1L)
@@ -70,7 +71,7 @@ class WalletServiceImplTest {
         Set<WalletDto> wallets = new HashSet<>();
 
         UserDto owner = new UserDto(1L, "John", "Bulon", "johnbullon", "123rhfjcdswe", roles, wallets);
-        WalletDto wallet = new WalletDto(1L, "w1", new BigDecimal(122), true, Currency.EUR, owner.getId());
+        WalletDto wallet = new WalletDto(1L, "w1", new BigDecimal(122), true, Currency.EUR, owner.getId(), false);
         wallets.add(wallet);
         Mockito.doAnswer(delete -> {
                     String deleted = "deleted";
@@ -102,9 +103,9 @@ class WalletServiceImplTest {
         Set<WalletDto> wallets = new HashSet<>();
         Set<RoleDto> roles = new HashSet<>();
         UserDto owner = new UserDto(1L, "John", "Bulon", "johnbullon", "123rhfjcdswe", roles, wallets);
-        WalletDto walletDefault = new WalletDto(1L, "w1", new BigDecimal(122), true, Currency.EUR, owner.getId());
-        WalletDto walletNotDefault = new WalletDto(2L, "w2", new BigDecimal(3000), false, Currency.EUR, owner.getId());
-        WalletDto walletNotDefaultSecond = new WalletDto(3L, "w3", new BigDecimal(320), false, Currency.EUR, owner.getId());
+        WalletDto walletDefault = new WalletDto(1L, "w1", new BigDecimal(122), true, Currency.EUR, owner.getId(), false);
+        WalletDto walletNotDefault = new WalletDto(2L, "w2", new BigDecimal(3000), false, Currency.EUR, owner.getId(), false);
+        WalletDto walletNotDefaultSecond = new WalletDto(3L, "w3", new BigDecimal(320), false, Currency.EUR, owner.getId(), false);
         wallets.add(walletDefault);
         wallets.add(walletNotDefault);
         wallets.add(walletNotDefaultSecond);
@@ -128,6 +129,7 @@ class WalletServiceImplTest {
                 .defaultWallet(true)
                 .currency(Currency.PLZ)
                 .userId(1L)
+                .archiveWallet(false)
                 .build();
         Mockito.when(mockWalletRepository.findById(1L)).thenReturn(Optional.of(walletToChange));
         Mockito.when(mockUserService.findUserByUsername("Petir")).thenReturn(walletOwner);
@@ -138,7 +140,7 @@ class WalletServiceImplTest {
     }
 
     @Test
-    public void WalletStatusChangedToNonDefault() {
+    public void walletStatusChangedToNonDefault() {
         WalletDto controlWallet = WalletDto.builder()
                 .id(2L)
                 .name("wallet2")
@@ -146,6 +148,7 @@ class WalletServiceImplTest {
                 .defaultWallet(true)
                 .currency(Currency.USD)
                 .userId(1L)
+                .archiveWallet(false)
                 .build();
         WalletDto updateWallet = WalletDto.builder()
                 .id(1L)
@@ -154,6 +157,7 @@ class WalletServiceImplTest {
                 .defaultWallet(true)
                 .currency(Currency.USD)
                 .userId(1L)
+                .archiveWallet(false)
                 .build();
         Mockito.when(mockWalletRepository.findByStatus(updateWallet.isDefaultWallet(), walletOwner.getId()))
                 .thenReturn(Optional.of(controlWallet));
@@ -174,6 +178,7 @@ class WalletServiceImplTest {
                 .defaultWallet(true)
                 .currency(Currency.USD)
                 .userId(1L)
+                .archiveWallet(false)
                 .build();
         UserDto notWalletOwner = UserDto.builder()
                 .id(2L)
@@ -217,6 +222,7 @@ class WalletServiceImplTest {
                 .defaultWallet(true)
                 .currency(Currency.USD)
                 .userId(2L)
+                .archiveWallet(false)
                 .build();
         Mockito.when(mockWalletRepository.findById(2L)).thenReturn(Optional.of(wallet));
         Mockito.when(mockUserService.findUserByUsername("Petir")).thenReturn(walletOwner);
@@ -234,6 +240,7 @@ class WalletServiceImplTest {
                 .defaultWallet(true)
                 .currency(Currency.USD)
                 .userId(1L)
+                .archiveWallet(false)
                 .build();
         List<WalletDto> expectedWalleList = new ArrayList<>();
         expectedWalleList.add(walletToChange);
@@ -245,7 +252,7 @@ class WalletServiceImplTest {
     }
 
     @Test
-    public void createNonDefaulWalletForUserWithoutWalletsTest() {
+    public void createNonDefaultWalletForUserWithoutWalletsTest() {
         UserDto user = UserDto.builder()
                 .id(1L)
                 .name("Harry")
@@ -261,6 +268,7 @@ class WalletServiceImplTest {
                 .defaultWallet(false)
                 .currency(Currency.USD)
                 .userId(1L)
+                .archiveWallet(false)
                 .build();
         Mockito.when(mockUserService.findUserByUsername(any())).thenReturn(user);
         Mockito.when(mockWalletRepository.save(any())).thenReturn(1L);
@@ -269,7 +277,7 @@ class WalletServiceImplTest {
     }
 
     @Test
-    public void createDefaulWalletForUserWithAlreadyExistedDefaultWalletTest() {
+    public void createDefaultWalletForUserWithAlreadyExistedDefaultWalletTest() {
         UserDto user = UserDto.builder()
                 .id(1L)
                 .name("Harry")
@@ -285,6 +293,7 @@ class WalletServiceImplTest {
                 .defaultWallet(true)
                 .currency(Currency.USD)
                 .userId(1L)
+                .archiveWallet(false)
                 .build();
         WalletDto walletToAdd = WalletDto.builder()
                 .name("super")
@@ -292,6 +301,7 @@ class WalletServiceImplTest {
                 .defaultWallet(true)
                 .currency(Currency.USD)
                 .userId(1L)
+                .archiveWallet(false)
                 .build();
         user.getWallets().add(walletExisted);
         Mockito.when(mockUserService.findUserByUsername(any())).thenReturn(user);
@@ -318,6 +328,7 @@ class WalletServiceImplTest {
                 .defaultWallet(true)
                 .currency(Currency.USD)
                 .userId(1L)
+                .archiveWallet(false)
                 .build();
         WalletDto walletToAdd = WalletDto.builder()
                 .name("wallet1")
@@ -325,6 +336,7 @@ class WalletServiceImplTest {
                 .defaultWallet(true)
                 .currency(Currency.USD)
                 .userId(1L)
+                .archiveWallet(false)
                 .build();
         user.getWallets().add(walletExisted);
         Mockito.when(mockUserService.findUserByUsername(any())).thenReturn(user);

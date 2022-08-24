@@ -1,0 +1,15 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+    <changeSet id="2022_08_23_add_column_archive_to_wallet" author="Anna Naumovich">
+        <addColumn tableName="wallets">
+            <column name="is_archived" type="boolean"/>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="wallets">
+                <column name="is_archived"/>
+            </dropColumn>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

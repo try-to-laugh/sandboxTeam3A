@@ -48,4 +48,6 @@ public class Wallet implements Serializable {
     @Column(name = "user_id")
     private Long userId;
 
+    @Column(name = "is_archived")
+    private boolean archiveWallet;
 }

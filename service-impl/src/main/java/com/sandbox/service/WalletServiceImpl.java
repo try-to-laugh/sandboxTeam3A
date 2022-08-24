@@ -1,7 +1,10 @@
 package com.sandbox.service;
 
+import com.sandbox.dto.TransactionDto;
+import com.sandbox.dto.TypeDto;
 import com.sandbox.dto.UserDto;
 import com.sandbox.dto.WalletDto;
+import com.sandbox.enums.TypeName;
 import com.sandbox.exception.BudgetRuntimeException;
 import com.sandbox.exception.WalletNotFoundException;
 import com.sandbox.repository.WalletRepository;
@@ -23,6 +26,7 @@ public class WalletServiceImpl implements WalletService {
     private static final Logger LOG = LoggerFactory.getLogger(WalletServiceImpl.class);
     private final WalletRepository walletRepository;
     private final UserService userService;
+    private final TypeService typeService;
 
     @Override
     public Long createWallet(WalletDto walletDto, String username) {
@@ -58,9 +62,14 @@ public class WalletServiceImpl implements WalletService {
         if (walletWhichWantToDelete.isDefaultWallet()) {
             changeDefaultWallet(walletOwner, id);
         }
-        walletRepository.deleteById(id);
-
-        LOG.info("The wallet was successfully deleted");
+        if (walletRepository.countTransactionByWalletId(walletWhichWantToDelete.getId()) > 0) {
+            walletWhichWantToDelete.setArchiveWallet(true);
+            walletRepository.save(walletWhichWantToDelete);
+            LOG.info("The wallet was archived");
+        } else {
+            walletRepository.deleteById(id);
+            LOG.info("The wallet was successfully deleted");
+        }
     }
 
     @Override
@@ -126,5 +135,25 @@ public class WalletServiceImpl implements WalletService {
             throw new WalletNotFoundException("Wallet not found");
         }
         return walletDto;
+    }
+
+    public void updateВalance(TransactionDto transaction, WalletDto wallet) {
+        BigDecimal newBalance = null;
+        Long typeId = transaction.getTypeId();
+        Optional<TypeDto> transactionType = typeService.findNameById(typeId);
+        TypeName typeName = TypeName.valueOf(transactionType.get().getName());
+        if (typeName.equals(TypeName.INCOME)) {
+            newBalance = wallet.getBalance().subtract(transaction.getAmount());
+        } else if (typeName.equals(TypeName.EXPENSE)) {
+            newBalance = wallet.getBalance().add(transaction.getAmount());
+        }
+        wallet.setBalance(newBalance);
+        LOG.info("Wallet balance changed");
+        save(wallet);
+    }
+
+    @Override
+    public long countTransactionByWalletId(Long walletId) {
+        return walletRepository.countTransactionByWalletId(walletId);
     }
 }

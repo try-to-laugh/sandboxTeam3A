@@ -17,7 +17,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 import java.util.List;
@@ -31,7 +30,6 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final WalletService walletService;
     private final UserService userService;
-    private final TypeService typeService;
 
     @Override
     public void deleteById(Long transactionId, String authorizedUsername) {
@@ -45,7 +43,7 @@ public class TransactionServiceImpl implements TransactionService {
         if (!authorizedUsernameUser.getId().equals(wallet.getUserId())) {
             throw new WalletNotFoundException("Impossible to delete this transaction. Transaction not found with id " + transactionId);
         }
-        countNewWalletBalance(transactionDto.get(), wallet);
+        walletService.updateВalance(transactionDto.get(), wallet);
         transactionRepository.deleteById(transactionId);
         LOG.info("Transaction deleted");
     }
@@ -59,7 +57,7 @@ public class TransactionServiceImpl implements TransactionService {
             throw new WalletNotFoundException("Impossible to create transaction. Wallet not found");
         }
         WalletDto wallet = walletOptional.get();
-        countNewWalletBalance(transactionDto, wallet);
+        walletService.updateВalance(transactionDto, wallet);
         return transactionRepository.save(transactionDto);
     }
 
@@ -114,5 +112,8 @@ public class TransactionServiceImpl implements TransactionService {
         wallet.setBalance(newBalance);
         LOG.info("Wallet balance changed");
         walletService.save(wallet);
+        }
+    public Optional<TransactionDto> findById(Long transactionId) {
+        return transactionRepository.findById(transactionId);
     }
 }

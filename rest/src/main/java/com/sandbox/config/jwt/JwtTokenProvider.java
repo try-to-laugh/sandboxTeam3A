@@ -26,8 +26,6 @@ import java.util.Set;
 public class JwtTokenProvider {
 
     private final UserDetailsService userDetailsService;
-
-    private static final String JWT_USER_ID = "userId";
     private static final String JWT_USERNAME = "username";
     private static final String JWT_ROLES = "roles";
 
@@ -43,9 +41,8 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String username, Long userId, Set<RoleDto> roles) {
+    public String createToken(String username, Set<RoleDto> roles) {
         Claims claims = Jwts.claims();
-        claims.put(JWT_USER_ID, userId.toString());
         claims.put(JWT_USERNAME, username);
         claims.put(JWT_ROLES, roles);
         Date validity = Date.from(LocalDateTime.now().plusMinutes(validityInMinutes)
@@ -66,10 +63,6 @@ public class JwtTokenProvider {
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-    }
-
-    public String getUserId(String token) {
-        return String.valueOf(Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get(JWT_USER_ID));
     }
 
     public String getUsername(String token) {

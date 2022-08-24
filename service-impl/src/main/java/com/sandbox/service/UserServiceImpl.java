@@ -2,6 +2,7 @@ package com.sandbox.service;
 
 import com.sandbox.dto.RoleDto;
 import com.sandbox.dto.UserDto;
+import com.sandbox.exception.UsernameAlreadyExistsException;
 import com.sandbox.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,6 +33,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Long saveUser(UserDto userDto) {
+        if (userRepository.findByUsername(userDto.getUsername()).isPresent()) {
+            throw new UsernameAlreadyExistsException("Username already exists");
+        }
         return userRepository.save(userDto);
     }
 
