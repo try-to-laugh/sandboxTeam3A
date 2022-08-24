@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.Set;
 
 import java.util.List;
 
@@ -44,7 +43,7 @@ public class TransactionServiceImpl implements TransactionService {
         if (!authorizedUsernameUser.getId().equals(wallet.getUserId())) {
             throw new WalletNotFoundException("Impossible to delete this transaction. Transaction not found with id " + transactionId);
         }
-        walletService.updateВalance(transactionDto.get(), wallet);
+        walletService.updateBalance(transactionDto.get(), wallet, true);
         transactionRepository.deleteById(transactionId);
         LOG.info("Transaction deleted");
     }
@@ -58,7 +57,7 @@ public class TransactionServiceImpl implements TransactionService {
             throw new WalletNotFoundException("Impossible to create transaction. Wallet not found");
         }
         WalletDto wallet = walletOptional.get();
-        walletService.updateВalance(transactionDto, wallet);
+        walletService.updateBalance(transactionDto, wallet, false);
         Long id = transactionRepository.save(transactionDto);
         LOG.info("Transaction created");
         return id;
@@ -74,7 +73,7 @@ public class TransactionServiceImpl implements TransactionService {
             throw new WalletNotFoundException("Impossible to update transaction. Wallet not found");
         }
         WalletDto wallet = walletOptional.get();
-        updateWalletBalance(transactionDto, wallet);
+        walletService.updateBalance(transactionDto, wallet, false);
         deleteById(transactionId, username);
         Long newId = transactionRepository.save(transactionDto);
         LOG.info("Transaction created");

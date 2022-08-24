@@ -14,8 +14,6 @@ import com.sandbox.service.TransactionService;
 import com.sandbox.service.TypeService;
 import com.sandbox.util.UserDetailsUtil;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +28,6 @@ import com.sandbox.util.TransactionsUtil;
 @RestController
 public class TransactionsController implements TransactionsApi {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TransactionsController.class);
     private final TransactionService transactionService;
 
     private final MapperRest<TransactionDto, TransactionResponseDto> mapperResponseRest;
@@ -42,9 +39,7 @@ public class TransactionsController implements TransactionsApi {
     public ResponseEntity<Long> createTransaction(@Valid TransactionRequestDto transactionRequestDto) {
         String username = UserDetailsUtil.getUsername();
         TransactionDto transactionDto = mapperRequestRest.toDto(transactionRequestDto);
-        transactionDto.setCategoryId(categoryService.findByName(transactionRequestDto.getCategory().getName()).getId());
-        transactionDto.setTypeId(typeService.findByName(transactionRequestDto.getTransactionType().getValue()).getId());
-        return new ResponseEntity<>(transactionService.createTransaction(transactionDto, username), HttpStatus.CREATED);
+        return new ResponseEntity<Long>(transactionService.createTransaction(transactionDto, username), HttpStatus.CREATED);
     }
 
     @Override
@@ -71,6 +66,10 @@ public class TransactionsController implements TransactionsApi {
 
     @Override
     public ResponseEntity<TransactionResponseDto> updateTransactionById(Long transactionId, @Valid TransactionRequestDto transactionRequestDto) {
-        return null;
+        TransactionDto transactionDto = mapperRequestRest.toDto(transactionRequestDto);
+        String username = UserDetailsUtil.getUsername();
+        TransactionDto resultTransaction = transactionService.updateTransactionById(transactionId, transactionDto, username);
+        TransactionResponseDto transactionResponseDto = mapperResponseRest.toApiDto(resultTransaction);
+        return new ResponseEntity<TransactionResponseDto>(transactionResponseDto, HttpStatus.OK);
     }
 }

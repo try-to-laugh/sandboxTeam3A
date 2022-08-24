@@ -19,7 +19,7 @@ public interface WalletService {
 
     Long save(WalletDto walletDto);
 
-    void updateВalance(TransactionDto transaction, WalletDto wallet);
+    void updateBalance(TransactionDto transaction, WalletDto wallet, boolean rollback);
 
     long countTransactionByWalletId (Long walletId);
 }

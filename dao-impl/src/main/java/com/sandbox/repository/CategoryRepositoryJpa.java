@@ -16,4 +16,6 @@ public interface CategoryRepositoryJpa extends JpaRepository<Category, Long> {
 
     @Query(value = "SELECT * FROM categories JOIN types ON categories.type_id = types.id WHERE types.name = :categoryType", nativeQuery = true)
     List<Category> findAll(@Param("categoryType") String categoryType);
+
+    Optional<Category> findById(Long id);
 }
