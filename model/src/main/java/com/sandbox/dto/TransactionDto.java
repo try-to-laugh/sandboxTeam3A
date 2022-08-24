@@ -1,7 +1,7 @@
 package com.sandbox.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.math.BigDecimal;

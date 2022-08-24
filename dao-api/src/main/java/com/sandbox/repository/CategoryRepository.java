@@ -10,4 +10,6 @@ public interface CategoryRepository {
     Optional<CategoryDto> findByName(String name);
 
     List<CategoryDto> getCategories(String categoryType);
+
+    Optional<CategoryDto> findById(Long id);
 }

@@ -28,4 +28,10 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     public List<CategoryDto> getCategories(String categoryType) {
         return categoryRepositoryJpa.findAll(categoryType).stream().map(categoryMapper::toCategoryDto).toList();
     }
+
+    @Override
+    public Optional<CategoryDto> findById(Long id) {
+        Optional<Category> category = categoryRepositoryJpa.findById(id);
+        return category.map(categoryMapper::toCategoryDto);
+    }
 }

@@ -8,5 +8,7 @@ public interface CategoryService {
 
     CategoryDto findByName(String name);
 
+    CategoryDto findById(Long id);
+
     List<CategoryDto> getCategories(String categoryType);
 }

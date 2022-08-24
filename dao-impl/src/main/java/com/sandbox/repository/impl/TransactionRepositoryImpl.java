@@ -2,19 +2,46 @@ package com.sandbox.repository.impl;
 
 import com.sandbox.dto.TransactionDto;
 import com.sandbox.entity.Transaction;
+import com.sandbox.enums.TypeName;
 import com.sandbox.mapper.TransactionMapper;
 import com.sandbox.repository.TransactionRepository;
 import com.sandbox.repository.TransactionRepositoryJpa;
+import com.sandbox.repository.TypeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 public class TransactionRepositoryImpl implements TransactionRepository {
-    private final TransactionRepositoryJpa transactionRepositoryJpa;
+
     private final TransactionMapper transactionMapper;
+    private final TransactionRepositoryJpa transactionRepositoryJpa;
+    private final TypeRepository typeRepository;
+
+
+    @Override
+    public List<TransactionDto> findWalletTransactions(Long walletId, String transactionType, Pageable pageable) {
+        if (transactionType.equals("INCOME")) {
+            return transactionMapper.toTransactionDtoList(transactionRepositoryJpa.
+                    findAllByWalletIdAndTypeId(walletId,
+                            typeRepository.findByName(TypeName.INCOME.getName()).get().getId(), pageable));
+        }
+        return transactionMapper.toTransactionDtoList(transactionRepositoryJpa.
+                findAllByWalletIdAndTypeId(walletId,
+                        typeRepository.findByName(TypeName.EXPENSE.getName()).get().getId(), pageable));
+
+    }
+
+    @Override
+    public List<TransactionDto> findAllWalletTransactions(Long walletId, Pageable pageable) {
+        return transactionMapper.toTransactionDtoList(transactionRepositoryJpa.
+                findAllByWalletId(walletId, pageable));
+    }
 
     @Override
     public void deleteById(Long id) {
@@ -25,6 +52,21 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     public Optional<TransactionDto> findById(Long id) {
         Optional<Transaction> transaction = transactionRepositoryJpa.findById(id);
         return transaction.map(transactionMapper::toTransactionDto);
+    }
+
+    @Override
+    public List<TransactionDto> findTransactions(String transactionType, Pageable pageable) {
+        if (transactionType.equals("INCOME")) {
+            return transactionMapper.toTransactionDtoList(transactionRepositoryJpa.
+                    findAllByTypeId(typeRepository.findByName(TypeName.INCOME.getName()).get().getId(), pageable));
+        }
+        return transactionMapper.toTransactionDtoList(transactionRepositoryJpa.
+                findAllByTypeId(typeRepository.findByName(TypeName.EXPENSE.getName()).get().getId(), pageable));
+    }
+
+    @Override
+    public List<TransactionDto> findAllTransactions(Pageable pageable) {
+        return transactionMapper.toTransactionDtoList(transactionRepositoryJpa.findAllTransactions(pageable));
     }
 
     @Override
