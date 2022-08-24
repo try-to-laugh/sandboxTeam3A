@@ -2,6 +2,7 @@ package com.sandbox.exception.handler;
 
 import com.sandbox.exception.BudgetRuntimeException;
 import com.sandbox.exception.ResourceNotFoundException;
+import com.sandbox.exception.UsernameAlreadyExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +23,7 @@ public class RestControllerAdviceHandler extends ResponseEntityExceptionHandler 
     private static final String LOGGER_BAD_REQUEST_EXCEPTION = "Bad request exception: {}";
     private static final String LOGGER_RESOURCE_NOT_FOUND_EXCEPTION = "Resource not found exception: {}";
     private static final String LOGGER_UNAUTHORIZED_EXCEPTION = "Unauthorized exception: {}";
+    private static final String LOGGER_USERNAME_ALREADY_EXISTS_EXCEPTION = "Username already exists exception: {}";
 
 
     @ExceptionHandler(value = {Throwable.class})
@@ -49,5 +51,12 @@ public class RestControllerAdviceHandler extends ResponseEntityExceptionHandler 
             AuthenticationException ex, WebRequest request) {
         LOG.info(LOGGER_UNAUTHORIZED_EXCEPTION, HttpStatus.UNAUTHORIZED, ex);
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
+    }
+
+    @ExceptionHandler(value = {UsernameAlreadyExistsException.class})
+    public ResponseEntity<Object> usernameAlreadyExistsException(
+            UsernameAlreadyExistsException ex, WebRequest request) {
+        LOG.info(LOGGER_USERNAME_ALREADY_EXISTS_EXCEPTION, HttpStatus.CONFLICT, ex);
+        return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 }
