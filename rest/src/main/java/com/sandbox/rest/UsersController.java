@@ -49,7 +49,7 @@ public class UsersController implements UsersApi {
     public ResponseEntity<Void> login(@Valid UserLoginDto userLoginDto) {
         UserDto userDto = authenticationService.authenticateUserAndGetToken(
                 userMapper.toDto(userLoginDto));
-        String token = jwtTokenProvider.createToken(userDto.getUsername(), userDto.getId(), userService.getUserRoles(userDto));
+        String token = jwtTokenProvider.createToken(userDto.getUsername(), userService.getUserRoles(userDto));
         return ResponseEntity.ok().header(authorizationHeader, "Bearer " + token).build();
     }
 
