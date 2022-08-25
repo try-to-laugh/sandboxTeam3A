@@ -12,4 +12,6 @@ public interface CategoryRepository {
     List<CategoryDto> getCategories(String categoryType);
 
     Optional<CategoryDto> findById(Long id);
+
+    void deleteById(Long id);
 }

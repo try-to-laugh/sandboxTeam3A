@@ -11,4 +11,6 @@ public interface CategoryService {
     CategoryDto findById(Long id);
 
     List<CategoryDto> getCategories(String categoryType);
+
+    void deleteById(Long id);
 }

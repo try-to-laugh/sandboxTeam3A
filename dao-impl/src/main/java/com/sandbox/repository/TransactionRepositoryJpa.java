@@ -25,4 +25,6 @@ public interface TransactionRepositoryJpa extends JpaRepository<Transaction, Lon
 
     @Query("select t from Transaction t")
     List<Transaction> findAllTransactions(Pageable transactionList);
+
+    Optional<Transaction> findByCategoryId(Long id);
 }

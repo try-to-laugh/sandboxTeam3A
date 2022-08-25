@@ -29,7 +29,8 @@ public class CategoriesController implements CategoriesApi {
 
     @Override
     public ResponseEntity<Void> deleteCategoryById(Long categoryId) {
-        return null;
+        categoryService.deleteById(categoryId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
