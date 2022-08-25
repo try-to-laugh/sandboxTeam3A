@@ -32,8 +32,6 @@ public class TransactionsController implements TransactionsApi {
 
     private final MapperRest<TransactionDto, TransactionResponseDto> mapperResponseRest;
     private final MapperRest<TransactionDto, TransactionRequestDto> mapperRequestRest;
-    private final TypeService typeService;
-    private final CategoryService categoryService;
 
     @Override
     public ResponseEntity<Long> createTransaction(@Valid TransactionRequestDto transactionRequestDto) {
