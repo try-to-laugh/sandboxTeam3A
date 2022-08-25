@@ -1,7 +1,9 @@
 package com.sandbox.service;
 
 import com.sandbox.dto.CategoryDto;
+import com.sandbox.exception.BudgetRuntimeException;
 import com.sandbox.repository.CategoryRepository;
+import com.sandbox.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +16,8 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+
+    private final TransactionRepository transactionRepository;
 
     @Override
     public CategoryDto findByName(String name) {
@@ -31,6 +35,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public void deleteById(Long id) {
+        if (transactionRepository.findByCategoryId(id).isPresent()) {
+            throw new BudgetRuntimeException("Transactions with this category already exist," +
+                    " please delete transactions first");
+        }
+        categoryRepository.deleteById(id);
+        
     public Long createCategory(CategoryDto categoryDto) {
         return categoryRepository.save(categoryDto);
     }

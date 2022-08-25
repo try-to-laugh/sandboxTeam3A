@@ -44,6 +44,12 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     }
 
     @Override
+    public Optional<TransactionDto> findByCategoryId(Long id) {
+        Optional<Transaction> transaction = transactionRepositoryJpa.findByCategoryId(id);
+        return transaction.map(transactionMapper::toTransactionDto);
+    }
+
+    @Override
     public void deleteById(Long id) {
         transactionRepositoryJpa.deleteById(id);
     }

@@ -22,5 +22,6 @@ public interface TransactionRepository {
 
     List<TransactionDto> findAllWalletTransactions(Long walletId, Pageable pageable);
 
+    Optional<TransactionDto> findByCategoryId(Long id);
 
 }
