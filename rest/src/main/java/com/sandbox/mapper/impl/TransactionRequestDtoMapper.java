@@ -32,7 +32,7 @@ public class TransactionRequestDtoMapper implements MapperRest<TransactionDto, T
 
         transactionDto.payer(apiDto.getPayer());
         transactionDto.walletId(apiDto.getWalletId());
-        transactionDto.categoryId(categoryService.findByName(apiDto.getCategory().getName()).getId());
+        transactionDto.categoryId(categoryService.findById(apiDto.getCategory().getId()).getId());
         transactionDto.typeId(typeService.findByName(apiDto.getTransactionType().getValue()).getId());
         return transactionDto.build();
     }
