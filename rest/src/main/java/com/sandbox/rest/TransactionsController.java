@@ -9,9 +9,7 @@ import com.sandbox.model.SortParameter;
 import com.sandbox.model.TransactionRequestDto;
 import com.sandbox.model.TransactionResponseDto;
 import com.sandbox.model.TransactionTypeParameter;
-import com.sandbox.service.CategoryService;
 import com.sandbox.service.TransactionService;
-import com.sandbox.service.TypeService;
 import com.sandbox.util.UserDetailsUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,7 +35,7 @@ public class TransactionsController implements TransactionsApi {
     public ResponseEntity<Long> createTransaction(@Valid TransactionRequestDto transactionRequestDto) {
         String username = UserDetailsUtil.getUsername();
         TransactionDto transactionDto = mapperRequestRest.toDto(transactionRequestDto);
-        return new ResponseEntity<Long>(transactionService.createTransaction(transactionDto, username), HttpStatus.CREATED);
+        return new ResponseEntity<>(transactionService.createTransaction(transactionDto, username), HttpStatus.CREATED);
     }
 
     @Override
@@ -68,6 +66,6 @@ public class TransactionsController implements TransactionsApi {
         String username = UserDetailsUtil.getUsername();
         TransactionDto resultTransaction = transactionService.updateTransactionById(transactionId, transactionDto, username);
         TransactionResponseDto transactionResponseDto = mapperResponseRest.toApiDto(resultTransaction);
-        return new ResponseEntity<TransactionResponseDto>(transactionResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(transactionResponseDto, HttpStatus.OK);
     }
 }

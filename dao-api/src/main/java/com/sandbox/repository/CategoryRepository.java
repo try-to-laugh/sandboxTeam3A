@@ -13,7 +13,6 @@ public interface CategoryRepository {
 
     Optional<CategoryDto> findById(Long id);
 
-
     void deleteById(Long id);
 
     Long save(CategoryDto categoryDto);
