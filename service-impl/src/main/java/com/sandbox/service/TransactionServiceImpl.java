@@ -99,20 +99,6 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
-    private void countNewWalletBalance(TransactionDto transaction, WalletDto wallet) {
-        BigDecimal newBalance = null;
-        Long typeId = transaction.getTypeId();
-        Optional<TypeDto> transactionType = typeService.findNameById(typeId);
-        TypeName typeName = TypeName.valueOf(transactionType.get().getName());
-        if (typeName.equals(TypeName.INCOME)) {
-            newBalance = wallet.getBalance().subtract(transaction.getAmount());
-        } else if (typeName.equals(TypeName.EXPENSE)) {
-            newBalance = wallet.getBalance().add(transaction.getAmount());
-        }
-        wallet.setBalance(newBalance);
-        LOG.info("Wallet balance changed");
-        walletService.save(wallet);
-        }
     public Optional<TransactionDto> findById(Long transactionId) {
         return transactionRepository.findById(transactionId);
     }
