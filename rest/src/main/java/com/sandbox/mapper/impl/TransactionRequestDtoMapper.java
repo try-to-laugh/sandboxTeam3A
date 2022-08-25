@@ -3,13 +3,20 @@ package com.sandbox.mapper.impl;
 import com.sandbox.dto.TransactionDto;
 import com.sandbox.mapper.MapperRest;
 import com.sandbox.model.TransactionRequestDto;
+import com.sandbox.service.CategoryService;
+import com.sandbox.service.TypeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.sql.Date;
 
 @Component
+@RequiredArgsConstructor
 public class TransactionRequestDtoMapper implements MapperRest<TransactionDto, TransactionRequestDto> {
+
+    private final CategoryService categoryService;
+    private final TypeService typeService;
 
     @Override
     public TransactionDto toDto(TransactionRequestDto apiDto) {
@@ -25,6 +32,8 @@ public class TransactionRequestDtoMapper implements MapperRest<TransactionDto, T
 
         transactionDto.payer(apiDto.getPayer());
         transactionDto.walletId(apiDto.getWalletId());
+        transactionDto.categoryId(categoryService.findByName(apiDto.getCategory().getName()).getId());
+        transactionDto.typeId(typeService.findByName(apiDto.getTransactionType().getValue()).getId());
         return transactionDto.build();
     }
 

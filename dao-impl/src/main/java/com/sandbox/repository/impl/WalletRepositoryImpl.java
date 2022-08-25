@@ -29,12 +29,9 @@ public class WalletRepositoryImpl implements WalletRepository {
     @Override
     public Optional<WalletDto> findById(Long id) {
         Optional<Wallet> wallet = walletRepositoryJpa.findById(id);
-        if (wallet.isPresent()) {
-            if (wallet.get().isArchiveWallet()) {
+        if (wallet.isPresent() & wallet.get().isArchiveWallet()) {
                 return Optional.empty();
-            }
         }
-
         return wallet.map(walletMapper::toWalletDto);
     }
 

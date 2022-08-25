@@ -137,15 +137,23 @@ public class WalletServiceImpl implements WalletService {
         return walletDto;
     }
 
-    public void updateВalance(TransactionDto transaction, WalletDto wallet) {
+    public void updateBalance(TransactionDto transaction, WalletDto wallet, boolean rollback) {
         BigDecimal newBalance = null;
         Long typeId = transaction.getTypeId();
         Optional<TypeDto> transactionType = typeService.findNameById(typeId);
         TypeName typeName = TypeName.valueOf(transactionType.get().getName());
-        if (typeName.equals(TypeName.INCOME)) {
-            newBalance = wallet.getBalance().subtract(transaction.getAmount());
-        } else if (typeName.equals(TypeName.EXPENSE)) {
-            newBalance = wallet.getBalance().add(transaction.getAmount());
+        if(rollback) {
+            if (typeName.equals(TypeName.INCOME)) {
+                newBalance = wallet.getBalance().subtract(transaction.getAmount());
+            } else if (typeName.equals(TypeName.EXPENSE)) {
+                newBalance = wallet.getBalance().add(transaction.getAmount());
+            }
+        } else {
+            if (typeName.equals(TypeName.INCOME)) {
+                newBalance = wallet.getBalance().add(transaction.getAmount());
+            } else if (typeName.equals(TypeName.EXPENSE)) {
+                newBalance = wallet.getBalance().subtract(transaction.getAmount());
+            }
         }
         wallet.setBalance(newBalance);
         LOG.info("Wallet balance changed");

@@ -43,7 +43,7 @@ public class TransactionServiceImpl implements TransactionService {
         if (!authorizedUsernameUser.getId().equals(wallet.getUserId())) {
             throw new WalletNotFoundException("Impossible to delete this transaction. Transaction not found with id " + transactionId);
         }
-        walletService.updateВalance(transactionDto.get(), wallet);
+        walletService.updateBalance(transactionDto.get(), wallet, true);
         transactionRepository.deleteById(transactionId);
         LOG.info("Transaction deleted");
     }
@@ -57,8 +57,28 @@ public class TransactionServiceImpl implements TransactionService {
             throw new WalletNotFoundException("Impossible to create transaction. Wallet not found");
         }
         WalletDto wallet = walletOptional.get();
-        walletService.updateВalance(transactionDto, wallet);
-        return transactionRepository.save(transactionDto);
+        walletService.updateBalance(transactionDto, wallet, false);
+        Long id = transactionRepository.save(transactionDto);
+        LOG.info("Transaction created");
+        return id;
+
+    }
+
+    @Override
+    public TransactionDto updateTransactionById(Long transactionId, TransactionDto transactionDto, String username) {
+        UserDto user = userService.findUserByUsername(username);
+        Optional<WalletDto> walletOptional = user.getWallets().stream()
+                .filter(walletDto -> walletDto.getId().equals(transactionDto.getWalletId())).findFirst();
+        if(walletOptional.isEmpty()) {
+            throw new WalletNotFoundException("Impossible to update transaction. Wallet not found");
+        }
+        WalletDto wallet = walletOptional.get();
+        walletService.updateBalance(transactionDto, wallet, false);
+        deleteById(transactionId, username);
+        Long newId = transactionRepository.save(transactionDto);
+        LOG.info("Transaction created");
+        transactionDto.setId(newId);
+        return transactionDto;
     }
 
     @Override
@@ -99,20 +119,6 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
-    private void countNewWalletBalance(TransactionDto transaction, WalletDto wallet) {
-        BigDecimal newBalance = null;
-        Long typeId = transaction.getTypeId();
-        Optional<TypeDto> transactionType = typeService.findNameById(typeId);
-        TypeName typeName = TypeName.valueOf(transactionType.get().getName());
-        if (typeName.equals(TypeName.INCOME)) {
-            newBalance = wallet.getBalance().subtract(transaction.getAmount());
-        } else if (typeName.equals(TypeName.EXPENSE)) {
-            newBalance = wallet.getBalance().add(transaction.getAmount());
-        }
-        wallet.setBalance(newBalance);
-        LOG.info("Wallet balance changed");
-        walletService.save(wallet);
-        }
     public Optional<TransactionDto> findById(Long transactionId) {
         return transactionRepository.findById(transactionId);
     }
