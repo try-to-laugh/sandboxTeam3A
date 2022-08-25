@@ -2,6 +2,7 @@ package com.sandbox.service;
 
 import com.sandbox.dto.CategoryDto;
 import com.sandbox.exception.BudgetRuntimeException;
+import com.sandbox.exception.CategoryNotFoundException;
 import com.sandbox.repository.CategoryRepository;
 import com.sandbox.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,8 +42,20 @@ public class CategoryServiceImpl implements CategoryService {
                     " please delete transactions first");
         }
         categoryRepository.deleteById(id);
-        
+    }
+
     public Long createCategory(CategoryDto categoryDto) {
         return categoryRepository.save(categoryDto);
+    }
+
+    @Override
+    public CategoryDto updateCategoryById(Long categoryId, CategoryDto categoryDto) {
+        CategoryDto updatedCategory = categoryRepository.findById(categoryId)
+                .orElseThrow(()->new CategoryNotFoundException("Category with  id = " + categoryId + " not found'"));
+        updatedCategory.setName(categoryDto.getName());
+        updatedCategory.setColor(categoryDto.getColor());
+        updatedCategory.setTypeId(categoryDto.getTypeId());
+        categoryRepository.save(updatedCategory);
+        return updatedCategory;
     }
 }

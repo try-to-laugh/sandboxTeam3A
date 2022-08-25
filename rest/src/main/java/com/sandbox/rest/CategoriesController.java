@@ -51,6 +51,9 @@ public class CategoriesController implements CategoriesApi {
 
     @Override
     public ResponseEntity<CategoryResponseDto> updateCategoryById(Long categoryId, @Valid CategoryRequestDto categoryRequestDto) {
-        return null;
+        CategoryDto categoryDto = categoryRequestMapperRest.toDto(categoryRequestDto);
+        CategoryDto resultCategoryDto = categoryService.updateCategoryById(categoryId, categoryDto);
+        CategoryResponseDto categoryResponseDto = categoryResponseMapperRest.toApiDto(resultCategoryDto);
+        return new ResponseEntity<>(categoryResponseDto, HttpStatus.OK);
     }
 }

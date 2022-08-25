@@ -40,6 +40,7 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     @Override
     public void deleteById(Long id) {
         categoryRepositoryJpa.deleteById(id);
+    }
 
     public Long save(CategoryDto categoryDto) {
         try {
