@@ -2,10 +2,12 @@ package com.sandbox.repository.impl;
 
 import com.sandbox.dto.CategoryDto;
 import com.sandbox.entity.Category;
+import com.sandbox.exception.BudgetRuntimeException;
 import com.sandbox.mapper.CategoryMapper;
 import com.sandbox.repository.CategoryRepository;
 import com.sandbox.repository.CategoryRepositoryJpa;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -38,5 +40,14 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     @Override
     public void deleteById(Long id) {
         categoryRepositoryJpa.deleteById(id);
+
+    public Long save(CategoryDto categoryDto) {
+        try {
+            Category savedCategory = categoryMapper.toCategory(categoryDto);
+            return categoryRepositoryJpa.saveAndFlush(savedCategory).getId();
+        } catch (DataIntegrityViolationException ex) {
+            throw new BudgetRuntimeException("A category with such name already exists. "
+                    + "Please, change the name", ex);
+        }
     }
 }

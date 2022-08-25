@@ -41,5 +41,8 @@ public class CategoryServiceImpl implements CategoryService {
                     " please delete transactions first");
         }
         categoryRepository.deleteById(id);
+        
+    public Long createCategory(CategoryDto categoryDto) {
+        return categoryRepository.save(categoryDto);
     }
 }

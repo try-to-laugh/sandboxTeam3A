@@ -10,13 +10,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CategoryMapperRest implements MapperRest<CategoryDto, CategoryResponseDto> {
+public class CategoryResponseMapperRest implements MapperRest<CategoryDto, CategoryResponseDto> {
 
     private final TypeService typeService;
 
     @Override
     public CategoryDto toDto(CategoryResponseDto apiDto) {
-        throw new UnsupportedOperationException("Method toDto of CategoryMapperRest not implemented");
+        throw new UnsupportedOperationException("Method toDto of CategoryResponseMapperRest not implemented");
     }
 
     @Override

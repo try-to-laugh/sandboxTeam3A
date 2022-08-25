@@ -12,5 +12,10 @@ public interface CategoryService {
 
     List<CategoryDto> getCategories(String categoryType);
 
+
     void deleteById(Long id);
+
+    Long createCategory(CategoryDto categoryDto);
+
+
 }
