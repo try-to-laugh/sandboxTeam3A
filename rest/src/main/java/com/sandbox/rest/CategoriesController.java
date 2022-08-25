@@ -20,11 +20,13 @@ import java.util.List;
 public class CategoriesController implements CategoriesApi {
 
     private final CategoryService categoryService;
-    private final MapperRest<CategoryDto, CategoryResponseDto> categoryMapperRest;
+    private final MapperRest<CategoryDto, CategoryResponseDto> categoryResponseMapperRest;
+    private final MapperRest<CategoryDto, CategoryRequestDto> categoryRequestMapperRest;
 
     @Override
     public ResponseEntity<Long> createCategory(@Valid CategoryRequestDto categoryRequestDto) {
-        return null;
+        CategoryDto categoryDto = categoryRequestMapperRest.toDto(categoryRequestDto);
+        return new ResponseEntity<>(categoryService.createCategory(categoryDto), HttpStatus.CREATED);
     }
 
     @Override
@@ -36,7 +38,7 @@ public class CategoriesController implements CategoriesApi {
     public ResponseEntity<List<CategoryResponseDto>> getAllCategories(@Valid TransactionTypeParameter categoryType) {
         List<CategoryDto> categoryDtoList = categoryService.getCategories(categoryType.getValue());
         List<CategoryResponseDto> categoryResponseDtoList = categoryDtoList.stream()
-                .map(categoryMapperRest::toApiDto)
+                .map(categoryResponseMapperRest::toApiDto)
                 .toList();
         return new ResponseEntity<>(categoryResponseDtoList, HttpStatus.OK);
     }
