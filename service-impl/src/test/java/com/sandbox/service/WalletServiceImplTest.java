@@ -127,7 +127,7 @@ class WalletServiceImplTest {
                 .name("wallet2")
                 .balance(new BigDecimal(123))
                 .defaultWallet(true)
-                .currency(Currency.PLZ)
+                .currency(Currency.PLN)
                 .userId(1L)
                 .archiveWallet(false)
                 .build();
