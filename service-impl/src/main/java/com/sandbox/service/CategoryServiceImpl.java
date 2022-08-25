@@ -29,4 +29,9 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryDto> getCategories(String categoryType) {
         return categoryRepository.getCategories(categoryType);
     }
+
+    @Override
+    public Long createCategory(CategoryDto categoryDto) {
+        return categoryRepository.save(categoryDto);
+    }
 }

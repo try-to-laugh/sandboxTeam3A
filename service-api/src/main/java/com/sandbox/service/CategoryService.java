@@ -11,4 +11,6 @@ public interface CategoryService {
     CategoryDto findById(Long id);
 
     List<CategoryDto> getCategories(String categoryType);
+
+    Long createCategory(CategoryDto categoryDto);
 }
