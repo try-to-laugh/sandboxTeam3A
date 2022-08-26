@@ -14,9 +14,9 @@ public interface TransactionRepository {
 
     Optional<TransactionDto> findById(Long id);
 
-    List<TransactionDto> findTransactions(String transactionType,Pageable pageable);
+    List<TransactionDto> findTransactions(String transactionType, Pageable pageable, Long userId);
 
-    List<TransactionDto> findAllTransactions(Pageable pageable);
+    List<TransactionDto> findAllTransactions(Pageable pageable, Long userId);
 
     List<TransactionDto> findWalletTransactions(Long walletId, String transactionType, Pageable pageable);
 

@@ -69,7 +69,7 @@ public class TransactionServiceImpl implements TransactionService {
         UserDto user = userService.findUserByUsername(username);
         Optional<WalletDto> walletOptional = user.getWallets().stream()
                 .filter(walletDto -> walletDto.getId().equals(transactionDto.getWalletId())).findFirst();
-        if(walletOptional.isEmpty()) {
+        if (walletOptional.isEmpty()) {
             throw new WalletNotFoundException("Impossible to update transaction. Wallet not found");
         }
         WalletDto wallet = walletOptional.get();
@@ -82,8 +82,8 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionDto> viewTransactionsList(TransactionsViewParametersDto searchParameters) {
-
+    public List<TransactionDto> viewTransactionsList(TransactionsViewParametersDto searchParameters, String username) {
+        UserDto user = userService.findUserByUsername(username);
         Pageable page =
                 switch (searchParameters.getSortParameter()) {
                     case "dateasc" -> PageRequest.of(Math.toIntExact(searchParameters.getPage()),
@@ -113,9 +113,9 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         if (searchParameters.getTransactionType() != null) {
-            return transactionRepository.findTransactions(searchParameters.getTransactionType(), page);
+            return transactionRepository.findTransactions(searchParameters.getTransactionType(), page, user.getId());
         } else {
-            return transactionRepository.findAllTransactions(page);
+            return transactionRepository.findAllTransactions(page, user.getId());
         }
     }
 

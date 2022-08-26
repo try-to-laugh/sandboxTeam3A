@@ -51,9 +51,10 @@ public class TransactionsController implements TransactionsApi {
 
     @Override
     public ResponseEntity<List<TransactionResponseDto>> getTransactions(@NotNull @Valid SortParameter sortBy, @NotNull @Valid Long page, @NotNull @Valid Long size, @Valid TransactionTypeParameter transactionsType, @Valid List<FilterParameter> filterBy, @Valid Long walletId) {
+        String username = UserDetailsUtil.getUsername();
         TransactionsViewParametersDto searchParameters =
                 TransactionsUtil.buildParameters(sortBy, page, size, transactionsType, filterBy, walletId);
-        List<TransactionDto> transactionList = transactionService.viewTransactionsList(searchParameters);
+        List<TransactionDto> transactionList = transactionService.viewTransactionsList(searchParameters, username);
         List<TransactionResponseDto> transactions = transactionList.stream()
                 .map(mapperResponseRest::toApiDto)
                 .toList();
