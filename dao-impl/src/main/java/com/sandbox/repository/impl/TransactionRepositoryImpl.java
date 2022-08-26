@@ -61,18 +61,18 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     }
 
     @Override
-    public List<TransactionDto> findTransactions(String transactionType, Pageable pageable) {
+    public List<TransactionDto> findTransactions(String transactionType, Pageable pageable, Long userId) {
         if (transactionType.equals("INCOME")) {
             return transactionMapper.toTransactionDtoList(transactionRepositoryJpa.
-                    findAllByTypeId(typeRepository.findByName(TypeName.INCOME.getName()).get().getId(), pageable));
+                    findAllByTypeId(typeRepository.findByName(TypeName.INCOME.getName()).get().getId(), pageable, userId));
         }
         return transactionMapper.toTransactionDtoList(transactionRepositoryJpa.
-                findAllByTypeId(typeRepository.findByName(TypeName.EXPENSE.getName()).get().getId(), pageable));
+                findAllByTypeId(typeRepository.findByName(TypeName.EXPENSE.getName()).get().getId(), pageable, userId));
     }
 
     @Override
-    public List<TransactionDto> findAllTransactions(Pageable pageable) {
-        return transactionMapper.toTransactionDtoList(transactionRepositoryJpa.findAllTransactions(pageable));
+    public List<TransactionDto> findAllTransactions(Pageable pageable, Long userId) {
+        return transactionMapper.toTransactionDtoList(transactionRepositoryJpa.findAllTransactions(pageable, userId));
     }
 
     @Override

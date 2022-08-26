@@ -13,11 +13,11 @@ public interface TransactionService {
 
     void deleteById(Long id, String username);
 
-    List<TransactionDto> viewTransactionsList(TransactionsViewParametersDto searchParameters);
+    List<TransactionDto> viewTransactionsList(TransactionsViewParametersDto searchParameters, String username);
 
     Long createTransaction(TransactionDto transactionDto, String username);
 
     Optional<TransactionDto> findById(Long transactionId);
 
-    TransactionDto updateTransactionById(Long TransactionId, TransactionDto transactionDto, String username);
+    TransactionDto updateTransactionById(Long transactionId, TransactionDto transactionDto, String username);
 }
